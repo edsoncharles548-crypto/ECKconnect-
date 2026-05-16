@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "624163124352",
+    "project_id": "eckconnect-60288",
+    "storage_bucket": "eckconnect-60288.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624163124352:android:72c26c0b81a0c151362265",
+        "android_client_info": {
+          "package_name": "com.shalomtabernaclechurch.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYZvG_ifZ331ohXNA8By2lygvOjZkGZ5U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
