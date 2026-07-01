@@ -709,6 +709,7 @@ function doPost(){
   }
   err.style.display = 'none';
   setLoading(btn, true);
+  dlog('⏳ doPost: kutuma nyumba kwenda Firestore...');
 
   const user = auth.currentUser;
   db.collection('listings').add({
@@ -723,6 +724,7 @@ function doPost(){
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   })
   .then(() => {
+    dlog('✅ doPost: imefanikiwa kuhifadhiwa!');
     setLoading(btn, false, '🚀 Weka Sasa!');
     document.getElementById('ptitle').value = '';
     document.getElementById('pprice').value = '';
@@ -733,6 +735,7 @@ function doPost(){
     go('home');
   })
   .catch(errObj => {
+    dlog('❌ doPost ERROR: ' + (errObj.code || '') + ' ' + errObj.message);
     setLoading(btn, false, '🚀 Weka Sasa!');
     err.textContent = '❌ Imeshindwa: ' + errObj.message;
     err.style.display = 'block';
