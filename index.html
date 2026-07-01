@@ -384,6 +384,13 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
+function dlog(msg){
+  const b = document.getElementById('debugBox');
+  if(b) b.innerHTML += msg + '<br>';
+  console.log(msg);
+}
+dlog('✅ Firebase imeanzishwa (init OK)');
+
 /* ============================================================
    2. NAVIGATION (kama ilivyokuwa)
    ============================================================ */
@@ -650,14 +657,17 @@ function filterSearch(q){
 }
 
 function loadListings(){
+  dlog('⏳ loadListings: kuanza kusoma Firestore...');
   db.collection('listings').orderBy('createdAt','desc').limit(50).get()
     .then(snap => {
+      dlog('✅ loadListings: imepata nyaraka ' + snap.size);
       allListings = [];
       snap.forEach(doc => allListings.push(Object.assign({id: doc.id}, doc.data())));
       renderHomeListings();
       renderSearchListings(allListings);
     })
     .catch(err => {
+      dlog('❌ loadListings ERROR: ' + (err.code || '') + ' ' + err.message);
       console.error('loadListings error:', err);
       document.getElementById('homeListings').innerHTML = '<div style="text-align:center;color:#FF8C8C;font-size:12px;padding:20px 0;">Imeshindwa kupakia nyumba. Angalia Firestore rules/database yako.</div>';
     });
@@ -741,5 +751,6 @@ function doMpesa(){
 }
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
+<div id="debugBox" style="position:fixed;bottom:0;left:0;right:0;max-height:130px;overflow:auto;background:#000;color:#0f0;font-size:10px;padding:6px;z-index:99999;font-family:monospace;white-space:pre-wrap;"></div>
 </body>
 </html>
