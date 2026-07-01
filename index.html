@@ -145,28 +145,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
       <div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:#FFD700;">15+</div><div style="font-size:10px;color:#9090C0;">Miji</div></div>
     </div>
     <div style="font-size:16px;font-weight:800;margin-bottom:12px;">🏠 Nyumba Zilizochaguliwa</div>
-    <div class="card" onclick="go('detail')" style="cursor:pointer;">
-      <div style="font-size:40px;text-align:center;margin-bottom:8px;">🏡</div>
-      <div class="card-title">Nyumba ya Vyumba 3</div>
-      <div class="card-sub">📍 Dar es Salaam, Kinondoni 🇹🇿</div>
-      <div class="card-price">TZS 800,000/mwezi</div>
-      <div style="font-size:11px;color:#9090C0;">🛏️ 3 Beds • 🚿 2 Baths • 📐 120m²</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">
-        <div style="font-size:12px;font-weight:700;">John Makundi <span style="color:#00C853;">✅</span></div>
-        <button class="btn btn-rainbow" style="width:auto;padding:6px 14px;font-size:11px;margin:0;" onclick="event.stopPropagation();go('messages')">💬 Wasiliana</button>
-      </div>
-    </div>
-    <div class="card" onclick="go('detail')" style="cursor:pointer;">
-      <div style="font-size:40px;text-align:center;margin-bottom:8px;">🛏️</div>
-      <div class="card-title">Chumba — Kariakoo</div>
-      <div class="card-sub">📍 Dar es Salaam, Kariakoo 🇹🇿</div>
-      <div class="card-price">TZS 150,000/mwezi</div>
-      <div style="font-size:11px;color:#9090C0;">🛏️ 1 Bed • 🚿 Shared • 📐 20m²</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">
-        <div style="font-size:12px;font-weight:700;">Amina Hassan <span style="color:#00C853;">✅</span></div>
-        <button class="btn btn-rainbow" style="width:auto;padding:6px 14px;font-size:11px;margin:0;" onclick="event.stopPropagation();go('messages')">💬 Wasiliana</button>
-      </div>
-    </div>
+    <div id="homeListings"><div style="text-align:center;color:#9090C0;font-size:13px;padding:20px 0;">Inapakia nyumba...</div></div>
     <a href="https://wa.me/255684253244" class="btn btn-green">💬 Wasiliana WhatsApp</a>
   </div>
   <div class="bnav">
@@ -183,20 +162,19 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <div style="width:100%;max-width:340px;">
     <button class="btn btn-back" onclick="go('home')">← Rudi</button>
     <div style="font-size:80px;text-align:center;background:rgba(255,255,255,0.08);border-radius:18px;padding:20px;margin-bottom:16px;">🏡</div>
-    <div style="font-size:22px;font-weight:900;color:#FFD700;margin-bottom:4px;">TZS 800,000/mwezi</div>
-    <div style="font-size:18px;font-weight:800;margin-bottom:4px;">Nyumba ya Vyumba 3</div>
-    <div style="font-size:12px;color:#9090C0;margin-bottom:16px;">📍 Dar es Salaam, Kinondoni 🇹🇿</div>
+    <div id="detailPrice" style="font-size:22px;font-weight:900;color:#FFD700;margin-bottom:4px;">TZS 800,000/mwezi</div>
+    <div id="detailTitle" style="font-size:18px;font-weight:800;margin-bottom:4px;">Nyumba ya Vyumba 3</div>
+    <div id="detailLocation" style="font-size:12px;color:#9090C0;margin-bottom:16px;">📍 Dar es Salaam, Kinondoni 🇹🇿</div>
     <div style="display:flex;gap:10px;margin-bottom:16px;">
-      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:20px;">🛏️</div><div style="font-size:14px;font-weight:800;">3</div><div style="font-size:10px;color:#9090C0;">Beds</div></div>
-      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:20px;">🚿</div><div style="font-size:14px;font-weight:800;">2</div><div style="font-size:10px;color:#9090C0;">Baths</div></div>
-      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:20px;">📐</div><div style="font-size:14px;font-weight:800;">120m²</div><div style="font-size:10px;color:#9090C0;">Eneo</div></div>
+      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:20px;">🛏️</div><div id="detailBeds" style="font-size:14px;font-weight:800;">3</div><div style="font-size:10px;color:#9090C0;">Beds</div></div>
+      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:12px;padding:12px;text-align:center;"><div style="font-size:20px;">🏷️</div><div id="detailType" style="font-size:14px;font-weight:800;">Kupanga</div><div style="font-size:10px;color:#9090C0;">Aina</div></div>
     </div>
     <div style="font-size:14px;font-weight:800;margin-bottom:8px;">Maelezo</div>
-    <div style="font-size:13px;color:#9090C0;line-height:1.8;margin-bottom:16px;">Nyumba nzuri ya kisasa Kinondoni. Bila madalali — wasiliana na mwenye moja kwa moja.</div>
+    <div id="detailDesc" style="font-size:13px;color:#9090C0;line-height:1.8;margin-bottom:16px;">Nyumba nzuri ya kisasa Kinondoni. Bila madalali — wasiliana na mwenye moja kwa moja.</div>
     <div style="background:rgba(255,255,255,0.08);border-radius:16px;padding:14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:46px;height:46px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853);display:flex;align-items:center;justify-content:center;font-weight:800;">J</div>
-        <div><div style="font-size:14px;font-weight:800;">John Makundi</div><div style="font-size:11px;color:#00C853;">✅ Verified Owner</div><div style="font-size:11px;color:#FFD700;">⭐⭐⭐⭐⭐ 4.9</div></div>
+        <div id="detailOwnerInitial" style="width:46px;height:46px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853);display:flex;align-items:center;justify-content:center;font-weight:800;">J</div>
+        <div><div id="detailOwnerName" style="font-size:14px;font-weight:800;">John Makundi</div><div style="font-size:11px;color:#00C853;">✅ Owner</div></div>
       </div>
     </div>
     <div style="display:flex;gap:10px;">
@@ -212,28 +190,9 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
     <div style="font-size:20px;font-weight:800;margin-bottom:16px;">🔍 Tafuta Nyumba</div>
     <div style="display:flex;align-items:center;background:rgba(255,255,255,0.1);border-radius:14px;padding:12px 16px;margin-bottom:12px;">
       <span style="margin-right:8px;">🔍</span>
-      <input style="background:none;border:none;outline:none;color:white;font-family:'Nunito',sans-serif;font-size:14px;flex:1;" placeholder="Mji, eneo, bei...">
+      <input id="searchInput" oninput="filterSearch(this.value)" style="background:none;border:none;outline:none;color:white;font-family:'Nunito',sans-serif;font-size:14px;flex:1;" placeholder="Mji, eneo, bei...">
     </div>
-    <div style="display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;padding-bottom:4px;">
-      <div style="padding:7px 14px;border-radius:20px;background:linear-gradient(135deg,#FF3B3B,#8E24AA);color:white;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;">Yote</div>
-      <div style="padding:7px 14px;border-radius:20px;background:rgba(255,255,255,0.1);color:#9090C0;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;">Panga</div>
-      <div style="padding:7px 14px;border-radius:20px;background:rgba(255,255,255,0.1);color:#9090C0;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;">Nunua</div>
-      <div style="padding:7px 14px;border-radius:20px;background:rgba(255,255,255,0.1);color:#9090C0;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;">Vyumba</div>
-    </div>
-    <div class="card" onclick="go('detail')" style="cursor:pointer;">
-      <div style="font-size:40px;text-align:center;margin-bottom:8px;">🏡</div>
-      <div class="card-title">Nyumba ya Vyumba 3</div>
-      <div class="card-sub">📍 Dar es Salaam, Kinondoni</div>
-      <div class="card-price">TZS 800,000/mwezi</div>
-      <div style="font-size:11px;color:#9090C0;">🛏️ 3 • 🚿 2 • 📐 120m²</div>
-    </div>
-    <div class="card" onclick="go('detail')" style="cursor:pointer;">
-      <div style="font-size:40px;text-align:center;margin-bottom:8px;">🛏️</div>
-      <div class="card-title">Chumba — Kariakoo</div>
-      <div class="card-sub">📍 Dar es Salaam, Kariakoo</div>
-      <div class="card-price">TZS 150,000/mwezi</div>
-      <div style="font-size:11px;color:#9090C0;">🛏️ 1 • 🚿 Shared • 📐 20m²</div>
-    </div>
+    <div id="searchListings"><div style="text-align:center;color:#9090C0;font-size:13px;padding:20px 0;">Inapakia nyumba...</div></div>
   </div>
   <div class="bnav">
     <div class="bni" onclick="go('home')"><div class="bni-icon">🏠</div><div class="bni-label">Home</div></div>
@@ -273,22 +232,15 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <div class="screen" id="post" style="justify-content:flex-start;padding-top:60px;padding-bottom:80px;">
   <div style="width:100%;max-width:340px;">
     <div style="font-size:20px;font-weight:800;margin-bottom:16px;">➕ Weka Nyumba</div>
-    <select class="input" style="appearance:none;"><option>🏡 Nyumba ya Kupanga</option><option>🏡 Nyumba ya Kuuza</option><option>🛏️ Chumba</option><option>🏢 Biashara</option></select>
-    <input class="input" type="text" placeholder="Kichwa / Title">
-    <input class="input" type="text" placeholder="Bei / Price (TZS)">
-    <input class="input" type="text" placeholder="Mji na Mtaa / City & Area">
-    <input class="input" type="number" placeholder="Idadi ya vyumba / Bedrooms">
-    <textarea class="input" rows="3" placeholder="Maelezo / Description..."></textarea>
-    <div style="background:rgba(255,255,255,0.08);border:2px dashed rgba(142,36,170,0.4);border-radius:14px;padding:24px;text-align:center;margin-bottom:12px;cursor:pointer;"><div style="font-size:32px;">📸</div><div style="font-size:13px;color:#9090C0;margin-top:6px;">Bonyeza kupakia picha</div></div>
-    <div style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:14px;padding:14px;margin-bottom:12px;">
-      <div style="font-size:14px;font-weight:800;margin-bottom:6px;">⚡ Tangaza Zaidi!</div>
-      <div style="display:flex;gap:8px;">
-        <div style="flex:1;background:rgba(26,26,46,0.8);border-radius:10px;padding:8px;text-align:center;cursor:pointer;"><div style="font-size:13px;font-weight:800;color:#FFD700;">5K</div><div style="font-size:10px;color:#9090C0;">7 siku</div></div>
-        <div style="flex:1;background:linear-gradient(135deg,rgba(255,140,0,0.3),rgba(255,59,59,0.3));border-radius:10px;padding:8px;text-align:center;cursor:pointer;border:1px solid rgba(255,140,0,0.4);"><div style="font-size:13px;font-weight:800;color:#FF8C00;">10K</div><div style="font-size:10px;color:#FF8C00;">30 siku ⭐</div></div>
-        <div style="flex:1;background:rgba(26,26,46,0.8);border-radius:10px;padding:8px;text-align:center;cursor:pointer;"><div style="font-size:13px;font-weight:800;color:#00C853;">20K</div><div style="font-size:10px;color:#9090C0;">90 siku</div></div>
-      </div>
-    </div>
-    <button class="btn btn-rainbow">🚀 Weka Sasa!</button>
+    <select class="input" style="appearance:none;" id="ptype"><option>🏡 Nyumba ya Kupanga</option><option>🏡 Nyumba ya Kuuza</option><option>🛏️ Chumba</option><option>🏢 Biashara</option></select>
+    <input class="input" type="text" placeholder="Kichwa / Title" id="ptitle">
+    <input class="input" type="text" placeholder="Bei / Price (TZS)" id="pprice">
+    <input class="input" type="text" placeholder="Mji na Mtaa / City & Area" id="plocation">
+    <input class="input" type="number" placeholder="Idadi ya vyumba / Bedrooms" id="pbeds">
+    <textarea class="input" rows="3" placeholder="Maelezo / Description..." id="pdesc"></textarea>
+    <div class="error" id="posterr">❌ Jaza sehemu zote muhimu!</div>
+    <div style="background:rgba(255,255,255,0.08);border:2px dashed rgba(142,36,170,0.4);border-radius:14px;padding:24px;text-align:center;margin-bottom:12px;cursor:pointer;"><div style="font-size:32px;">📸</div><div style="font-size:13px;color:#9090C0;margin-top:6px;">Upakiaji wa picha unakuja hivi karibuni</div></div>
+    <button class="btn btn-rainbow" id="postBtn" onclick="doPost()">🚀 Weka Sasa!</button>
   </div>
   <div class="bnav">
     <div class="bni" onclick="go('home')"><div class="bni-icon">🏠</div><div class="bni-label">Home</div></div>
@@ -639,6 +591,146 @@ auth.onAuthStateChanged(user => {
 /* ============================================================
    MALIPO (bado ni mock — tutaunganisha gateway halisi baadaye)
    ============================================================ */
+/* ============================================================
+   9. NYUMBA (LISTINGS) — Firestore
+   ============================================================ */
+let allListings = [];
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+function listingCardHtml(l){
+  const title = escapeHtml(l.title || 'Nyumba');
+  const location = escapeHtml(l.location || '');
+  const price = l.price ? 'TZS ' + Number(l.price).toLocaleString() + '/mwezi' : 'Bei: Waliza';
+  const beds = l.beds || '-';
+  const owner = escapeHtml(l.ownerName || 'Mmiliki');
+  const emoji = (l.type || '').includes('Chumba') ? '🛏️' : '🏡';
+  return `<div class="card" style="cursor:pointer;" onclick="showDetail('${l.id}')">
+    <div style="font-size:40px;text-align:center;margin-bottom:8px;">${emoji}</div>
+    <div class="card-title">${title}</div>
+    <div class="card-sub">📍 ${location}</div>
+    <div class="card-price">${price}</div>
+    <div style="font-size:11px;color:#9090C0;">🛏️ ${beds} Beds</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">
+      <div style="font-size:12px;font-weight:700;">${owner}</div>
+      <button class="btn btn-rainbow" style="width:auto;padding:6px 14px;font-size:11px;margin:0;" onclick="event.stopPropagation();go('messages')">💬 Wasiliana</button>
+    </div>
+  </div>`;
+}
+
+function renderListingsInto(elId, list){
+  const el = document.getElementById(elId);
+  if(!list.length){
+    el.innerHTML = '<div style="text-align:center;color:#9090C0;font-size:13px;padding:20px 0;">Bado hakuna nyumba. Kuwa wa kwanza kuweka! 🏠</div>';
+    return;
+  }
+  el.innerHTML = list.map(listingCardHtml).join('');
+}
+
+function renderHomeListings(){
+  renderListingsInto('homeListings', allListings.slice(0, 6));
+}
+
+function renderSearchListings(list){
+  renderListingsInto('searchListings', list);
+}
+
+function filterSearch(q){
+  q = (q || '').toLowerCase().trim();
+  if(!q){ renderSearchListings(allListings); return; }
+  const filtered = allListings.filter(l =>
+    (l.title||'').toLowerCase().includes(q) ||
+    (l.location||'').toLowerCase().includes(q)
+  );
+  renderSearchListings(filtered);
+}
+
+function loadListings(){
+  db.collection('listings').orderBy('createdAt','desc').limit(50).get()
+    .then(snap => {
+      allListings = [];
+      snap.forEach(doc => allListings.push(Object.assign({id: doc.id}, doc.data())));
+      renderHomeListings();
+      renderSearchListings(allListings);
+    })
+    .catch(err => {
+      console.error('loadListings error:', err);
+      document.getElementById('homeListings').innerHTML = '<div style="text-align:center;color:#FF8C8C;font-size:12px;padding:20px 0;">Imeshindwa kupakia nyumba. Angalia Firestore rules/database yako.</div>';
+    });
+}
+
+function showDetail(id){
+  const l = allListings.find(x => x.id === id);
+  if(!l) return;
+  document.getElementById('detailTitle').textContent = l.title || 'Nyumba';
+  document.getElementById('detailPrice').textContent = l.price ? ('TZS ' + Number(l.price).toLocaleString() + '/mwezi') : 'Bei: Waliza';
+  document.getElementById('detailLocation').textContent = '📍 ' + (l.location || '');
+  document.getElementById('detailBeds').textContent = l.beds || '-';
+  document.getElementById('detailType').textContent = (l.type || '').replace(/^[^ ]+ /,'') || 'Nyumba';
+  document.getElementById('detailDesc').textContent = l.description || 'Hakuna maelezo.';
+  const ownerName = l.ownerName || 'Mmiliki';
+  document.getElementById('detailOwnerName').textContent = ownerName;
+  document.getElementById('detailOwnerInitial').textContent = ownerName.charAt(0).toUpperCase();
+  go('detail');
+}
+
+function doPost(){
+  if(!auth.currentUser){
+    alert('Tafadhali ingia (Login) kabla ya kuweka nyumba.');
+    go('login');
+    return;
+  }
+  const type = document.getElementById('ptype').value;
+  const title = document.getElementById('ptitle').value.trim();
+  const price = document.getElementById('pprice').value.trim();
+  const location = document.getElementById('plocation').value.trim();
+  const beds = document.getElementById('pbeds').value.trim();
+  const desc = document.getElementById('pdesc').value.trim();
+  const err = document.getElementById('posterr');
+  const btn = document.getElementById('postBtn');
+
+  if(!title || !price || !location){
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  setLoading(btn, true);
+
+  const user = auth.currentUser;
+  db.collection('listings').add({
+    type: type,
+    title: title,
+    price: Number(price.replace(/[^0-9]/g,'')) || 0,
+    location: location,
+    beds: beds,
+    description: desc,
+    ownerId: user.uid,
+    ownerName: user.displayName || (user.email ? user.email.split('@')[0] : 'Mmiliki'),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(() => {
+    setLoading(btn, false, '🚀 Weka Sasa!');
+    document.getElementById('ptitle').value = '';
+    document.getElementById('pprice').value = '';
+    document.getElementById('plocation').value = '';
+    document.getElementById('pbeds').value = '';
+    document.getElementById('pdesc').value = '';
+    loadListings();
+    go('home');
+  })
+  .catch(errObj => {
+    setLoading(btn, false, '🚀 Weka Sasa!');
+    err.textContent = '❌ Imeshindwa: ' + errObj.message;
+    err.style.display = 'block';
+  });
+}
+
+loadListings();
+
 function doPay(){ go('paysuccess'); }
 function doMpesa(){
   const p = document.getElementById('mpesaphone').value;
