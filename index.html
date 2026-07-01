@@ -13,6 +13,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 .screen{display:none;min-height:100vh;padding:20px;}
 .screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .btn{display:block;width:100%;max-width:340px;margin:0 auto 12px;padding:15px;border-radius:14px;border:none;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;text-align:center;text-decoration:none;}
+.btn:disabled{opacity:0.6;cursor:not-allowed;}
 .btn-rainbow{background:linear-gradient(135deg,#FF6B6B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA);color:white;}
 .btn-outline{background:transparent;border:2px solid #8E24AA;color:white;}
 .btn-green{background:#25D366;color:white;}
@@ -45,6 +46,8 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.15);}
 .pay-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:14px;}
 .pay-row{display:flex;align-items:center;background:rgba(255,255,255,0.08);border-radius:16px;padding:14px;width:100%;max-width:340px;margin-bottom:10px;cursor:pointer;}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.4);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;margin-right:6px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
@@ -63,7 +66,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <button class="btn btn-rainbow" onclick="go('login')">🔑 Login / Ingia</button>
   <button class="btn btn-outline" onclick="go('register')">📝 Register / Jisajili</button>
   <div class="divider">or / au</div>
-  <button class="btn btn-outline" onclick="go('home')" style="border-color:#4285F4;color:#4285F4;">G Continue with Google</button>
+  <button class="btn btn-outline" id="googleBtnSplash" style="border-color:#4285F4;color:#4285F4;">G Continue with Google</button>
   <a href="https://wa.me/255684253244" class="btn btn-green">💬 WhatsApp ECKconnect</a>
   <div class="footer">No agents • No fees • Dar es Salaam 🇹🇿</div>
 </div>
@@ -76,9 +79,9 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <input class="input" type="email" placeholder="📧 Email yako" id="lemail">
   <input class="input" type="password" placeholder="🔒 Nywila / Password" id="lpass">
   <div class="error" id="lerr">❌ Jaza email na nywila!</div>
-  <button class="btn btn-rainbow" onclick="doLogin()">🚀 Ingia / Login</button>
+  <button class="btn btn-rainbow" id="loginBtn" onclick="doLogin()">🚀 Ingia / Login</button>
   <div class="divider">or</div>
-  <button class="btn btn-outline" onclick="go('home')" style="border-color:#4285F4;color:#4285F4;">G Google</button>
+  <button class="btn btn-outline" id="googleBtnLogin" style="border-color:#4285F4;color:#4285F4;">G Google</button>
   <div style="text-align:center;margin-top:12px;font-size:13px;color:#9090C0;">Huna akaunti? <span style="color:#FF8C00;cursor:pointer;font-weight:800;" onclick="go('register')">Jisajili</span></div>
   <div style="text-align:center;margin-top:8px;font-size:13px;"><span style="color:#FF8C00;cursor:pointer;font-weight:800;" onclick="go('reset')">Umesahau nywila?</span></div>
 </div>
@@ -91,14 +94,14 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <input class="input" type="text" placeholder="👤 Jina lako kamili" id="rname">
   <input class="input" type="email" placeholder="📧 Email" id="remail">
   <input class="input" type="tel" placeholder="📱 Simu (+255...)" id="rphone">
-  <select class="input" style="appearance:none;">
+  <select class="input" style="appearance:none;" id="rcountry">
     <option>🇹🇿 Tanzania</option>
     <option>🇨🇩 Congo DRC</option>
     <option>🇰🇪 Kenya</option>
     <option>🇺🇬 Uganda</option>
     <option>🇫🇷 France</option>
   </select>
-  <select class="input" style="appearance:none;">
+  <select class="input" style="appearance:none;" id="rrole">
     <option>🔍 Natafuta nyumba</option>
     <option>🏠 Mwenye nyumba</option>
     <option>👥 Zote mbili</option>
@@ -106,7 +109,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <input class="input" type="password" placeholder="🔒 Nywila (min 8)" id="rpass">
   <input class="input" type="password" placeholder="✅ Thibitisha nywila" id="rpass2">
   <div class="error" id="rerr">❌ Jaza sehemu zote!</div>
-  <button class="btn btn-rainbow" onclick="doRegister()">🎉 Fungua Akaunti</button>
+  <button class="btn btn-rainbow" id="registerBtn" onclick="doRegister()">🎉 Fungua Akaunti</button>
   <div style="text-align:center;margin-top:12px;font-size:13px;color:#9090C0;">Una akaunti? <span style="color:#FF8C00;cursor:pointer;font-weight:800;" onclick="go('login')">Ingia</span></div>
 </div>
 
@@ -117,8 +120,9 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <div class="title">Reset Nywila</div>
   <div class="sub" style="margin-bottom:20px;">Weka email yako</div>
   <input class="input" type="email" placeholder="📧 Email yako" id="resetemail">
+  <div class="error" id="reseterr">❌ Weka email sahihi!</div>
   <div id="resetsuccess" style="display:none;" class="success">✅ Link imetumwa! Angalia email yako!</div>
-  <button class="btn btn-rainbow" onclick="doReset()">📨 Tuma Link</button>
+  <button class="btn btn-rainbow" id="resetBtn" onclick="doReset()">📨 Tuma Link</button>
 </div>
 
 <!-- HOME -->
@@ -127,9 +131,9 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
       <div>
         <div style="font-size:12px;color:#9090C0;">Karibu 👋</div>
-        <div style="font-size:22px;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ECKconnect</div>
+        <div id="homeUserName" style="font-size:22px;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ECKconnect</div>
       </div>
-      <div onclick="go('profile')" style="width:44px;height:44px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;">E</div>
+      <div onclick="go('profile')" id="homeAvatar" style="width:44px;height:44px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;">E</div>
     </div>
     <div style="display:flex;align-items:center;background:rgba(255,255,255,0.1);border-radius:14px;padding:12px 16px;margin-bottom:16px;">
       <span style="margin-right:8px;">🔍</span>
@@ -304,11 +308,11 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
       <div style="font-size:32px;font-weight:900;color:#FFD700;">TZS 800,000</div>
       <div style="font-size:11px;color:#9090C0;">Rent — Dar es Salaam</div>
     </div>
-    <div class="pay-row" onclick="go('paypal')"><div class="pay-icon" style="background:linear-gradient(135deg,#003087,#009cde);">💙</div><div><div style="font-size:15px;font-weight:800;">PayPal</div><div style="font-size:11px;color:#9090C0;">International • All cards</div></div><div style="margin-left:auto;color:#9090C0;font-size:20px;">›</div></div>
     <div class="pay-row" onclick="go('bank')"><div class="pay-icon" style="background:linear-gradient(135deg,#1A5276,#1565C0);">🏦</div><div><div style="font-size:15px;font-weight:800;">Bank Transfer</div><div style="font-size:11px;color:#9090C0;">CRDB • NMB • NBC</div></div><div style="margin-left:auto;color:#9090C0;font-size:20px;">›</div></div>
     <div class="pay-row" onclick="go('mpesa')"><div class="pay-icon" style="background:linear-gradient(135deg,#00a651,#007a3d);">📱</div><div><div style="font-size:15px;font-weight:800;">M-Pesa / Tigo</div><div style="font-size:11px;color:#9090C0;">Mobile money Tanzania</div></div><div style="margin-left:auto;color:#9090C0;font-size:20px;">›</div></div>
     <div class="pay-row" onclick="go('mpesa')"><div class="pay-icon" style="background:linear-gradient(135deg,#FF3B3B,#CC0000);">📲</div><div><div style="font-size:15px;font-weight:800;">Airtel Money</div><div style="font-size:11px;color:#9090C0;">+255 684 253 244</div></div><div style="margin-left:auto;color:#9090C0;font-size:20px;">›</div></div>
     <div style="text-align:center;font-size:11px;color:#9090C0;margin-top:12px;">🔒 Secure • SSL Encrypted • Safe</div>
+    <div style="text-align:center;font-size:10px;color:#7070A0;margin-top:6px;">Note: online card/PayPal checkout kitaunganishwa kwa gateway rasmi baadaye — kwa sasa tumia Bank/M-Pesa/Airtel.</div>
   </div>
   <div class="bnav">
     <div class="bni" onclick="go('home')"><div class="bni-icon">🏠</div><div class="bni-label">Home</div></div>
@@ -316,23 +320,6 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
     <div class="bni" onclick="go('post')"><div class="bni-icon">➕</div><div class="bni-label">Post</div></div>
     <div class="bni" onclick="go('messages')"><div class="bni-icon">💬</div><div class="bni-label">Chat</div></div>
     <div class="bni on" onclick="go('payments')"><div class="bni-icon">💳</div><div class="bni-label">Pay</div></div>
-  </div>
-</div>
-
-<!-- PAYPAL -->
-<div class="screen" id="paypal" style="justify-content:flex-start;padding-top:20px;">
-  <div style="width:100%;max-width:340px;">
-    <button class="btn btn-back" onclick="go('payments')">← Rudi</button>
-    <div style="text-align:center;margin-bottom:16px;"><div style="font-size:48px;">💙</div><div style="font-size:24px;font-weight:900;color:#009cde;">PayPal</div></div>
-    <div style="background:linear-gradient(135deg,rgba(0,48,135,0.3),rgba(0,156,222,0.3));border:1px solid rgba(0,156,222,0.3);border-radius:16px;padding:14px;text-align:center;margin-bottom:16px;"><div style="font-size:12px;color:#9090C0;">Amount</div><div style="font-size:28px;font-weight:900;color:#009cde;">TZS 800,000</div></div>
-    <input class="input" type="email" placeholder="📧 PayPal Email" id="ppemail">
-    <input class="input" type="password" placeholder="🔒 PayPal Password" id="pppass">
-    <div class="error" id="pperr">❌ Jaza email na nywila!</div>
-    <button class="btn btn-paypal" onclick="doPayPal()">💙 Lipa na PayPal</button>
-    <div class="divider" style="width:100%;">au lipa na kadi</div>
-    <input class="input" type="text" placeholder="💳 1234 5678 9012 3456">
-    <div style="display:flex;gap:10px;"><input class="input" type="text" placeholder="MM/YY" style="flex:1;"><input class="input" type="text" placeholder="CVV" style="flex:1;"></div>
-    <button class="btn btn-rainbow" onclick="doPayPal()">💳 Lipa na Kadi</button>
   </div>
 </div>
 
@@ -389,9 +376,9 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <div class="screen" id="profile" style="justify-content:flex-start;padding-top:60px;padding-bottom:80px;">
   <div style="width:100%;max-width:340px;">
     <div style="text-align:center;padding:20px 0;">
-      <div style="width:90px;height:90px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;margin:0 auto 12px;box-shadow:0 0 40px rgba(142,36,170,0.7);">E</div>
-      <div style="font-size:20px;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Edson Charles</div>
-      <div style="font-size:12px;color:#9090C0;margin-top:4px;">edsoncharles548@gmail.com</div>
+      <div id="profileAvatar" style="width:90px;height:90px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;margin:0 auto 12px;box-shadow:0 0 40px rgba(142,36,170,0.7);">E</div>
+      <div id="profileName" style="font-size:20px;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Edson Charles</div>
+      <div id="profileEmail" style="font-size:12px;color:#9090C0;margin-top:4px;">edsoncharles548@gmail.com</div>
       <div style="font-size:12px;color:#9090C0;">Dar es Salaam 🇹🇿</div>
       <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;">
         <span style="padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(0,200,83,0.15);color:#00C853;border:1px solid rgba(0,200,83,0.3);">✅ Verified</span>
@@ -404,11 +391,11 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
       <div style="text-align:center;"><div style="font-size:20px;font-weight:900;color:#FFD700;">248</div><div style="font-size:10px;color:#9090C0;">Views</div></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="go('payments')"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">💳</span><div><div style="font-size:14px;font-weight:700;">Malipo / Payments</div><div style="font-size:11px;color:#9090C0;">PayPal, Bank, M-Pesa, Airtel</div></div></div><span style="color:#9090C0;">›</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="go('payments')"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">💳</span><div><div style="font-size:14px;font-weight:700;">Malipo / Payments</div><div style="font-size:11px;color:#9090C0;">Bank, M-Pesa, Airtel</div></div></div><span style="color:#9090C0;">›</span></div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏠</span><div><div style="font-size:14px;font-weight:700;">Nyumba Zangu</div><div style="font-size:11px;color:#9090C0;">3 active listings</div></div></div><span style="color:#9090C0;">›</span></div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">❤️</span><div><div style="font-size:14px;font-weight:700;">Zilizohifadhiwa</div><div style="font-size:11px;color:#9090C0;">12 properties</div></div></div><span style="color:#9090C0;">›</span></div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🌍</span><div><div style="font-size:14px;font-weight:700;">Lugha / Language</div><div style="font-size:11px;color:#9090C0;">SW / EN / FR</div></div></div><span style="color:#9090C0;">›</span></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="go('splash')"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🚪</span><div><div style="font-size:14px;font-weight:700;color:#FF3B3B;">Toka / Logout</div></div></div><span style="color:#FF3B3B;">›</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="doLogout()"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🚪</span><div><div style="font-size:14px;font-weight:700;color:#FF3B3B;">Toka / Logout</div></div></div><span style="color:#FF3B3B;">›</span></div>
     </div>
   </div>
   <div class="bnav">
@@ -420,14 +407,212 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   </div>
 </div>
 
+<!-- ============== FIREBASE ============== -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <script>
-function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
-function doLogin(){const e=document.getElementById('lemail').value,p=document.getElementById('lpass').value,err=document.getElementById('lerr');if(!e||!p){err.style.display='block';return;}err.style.display='none';go('home');}
-function doRegister(){const n=document.getElementById('rname').value,e=document.getElementById('remail').value,p=document.getElementById('rpass').value,p2=document.getElementById('rpass2').value,err=document.getElementById('rerr');if(!n||!e||!p){err.style.display='block';err.textContent='❌ Jaza sehemu zote!';return;}if(p!==p2){err.style.display='block';err.textContent='❌ Nywila hazifanani!';return;}err.style.display='none';go('home');}
-function doReset(){const e=document.getElementById('resetemail').value;if(!e)return;document.getElementById('resetsuccess').style.display='block';setTimeout(()=>go('login'),2500);}
-function doPayPal(){const e=document.getElementById('ppemail').value,p=document.getElementById('pppass').value,err=document.getElementById('pperr');if(!e||!p){err.style.display='block';return;}err.style.display='none';go('paysuccess');}
-function doPay(){go('paysuccess');}
-function doMpesa(){const p=document.getElementById('mpesaphone').value,err=document.getElementById('mpesaerr');if(!p){err.style.display='block';return;}err.style.display='none';go('paysuccess');}
+const firebaseConfig = {
+  apiKey: "AIzaSyDBvW6bJ6LImCipObuofBQl8g_FKdjU1dA",
+  authDomain: "eckconect.firebaseapp.com",
+  projectId: "eckconect",
+  storageBucket: "eckconect.firebasestorage.app",
+  messagingSenderId: "192206912620",
+  appId: "1:192206912620:web:0dee70989feec930d5ac49"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function setLoading(btn, loading, originalText){
+  if(loading){
+    btn.disabled = true;
+    btn.dataset.original = btn.innerHTML;
+    btn.innerHTML = '<span class="spinner"></span>Inasubiri...';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = btn.dataset.original || originalText;
+  }
+}
+
+function friendlyError(code){
+  const map = {
+    'auth/invalid-email':'❌ Email si sahihi.',
+    'auth/user-not-found':'❌ Akaunti haipo. Jisajili kwanza.',
+    'auth/wrong-password':'❌ Nywila si sahihi.',
+    'auth/email-already-in-use':'❌ Email hii tayari inatumika.',
+    'auth/weak-password':'❌ Nywila ni fupi mno (min 6-8 herufi).',
+    'auth/invalid-credential':'❌ Email au nywila si sahihi.',
+    'auth/too-many-requests':'❌ Majaribio mengi. Subiri kidogo kisha jaribu tena.',
+    'auth/network-request-failed':'❌ Tatizo la mtandao. Angalia intaneti yako.'
+  };
+  return map[code] || ('❌ Hitilafu: ' + (code || 'jaribu tena'));
+}
+
+function doLogin(){
+  const e = document.getElementById('lemail').value.trim();
+  const p = document.getElementById('lpass').value;
+  const err = document.getElementById('lerr');
+  const btn = document.getElementById('loginBtn');
+
+  if(!e || !p){
+    err.textContent = '❌ Jaza email na nywila!';
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  setLoading(btn, true);
+
+  auth.signInWithEmailAndPassword(e, p)
+    .then(() => {
+      setLoading(btn, false, '🚀 Ingia / Login');
+      go('home');
+    })
+    .catch(errObj => {
+      setLoading(btn, false, '🚀 Ingia / Login');
+      err.textContent = friendlyError(errObj.code);
+      err.style.display = 'block';
+    });
+}
+
+function doRegister(){
+  const n = document.getElementById('rname').value.trim();
+  const e = document.getElementById('remail').value.trim();
+  const phone = document.getElementById('rphone').value.trim();
+  const country = document.getElementById('rcountry').value;
+  const role = document.getElementById('rrole').value;
+  const p = document.getElementById('rpass').value;
+  const p2 = document.getElementById('rpass2').value;
+  const err = document.getElementById('rerr');
+  const btn = document.getElementById('registerBtn');
+
+  if(!n || !e || !p){
+    err.textContent = '❌ Jaza sehemu zote!';
+    err.style.display = 'block';
+    return;
+  }
+  if(p.length < 8){
+    err.textContent = '❌ Nywila iwe angalau herufi 8!';
+    err.style.display = 'block';
+    return;
+  }
+  if(p !== p2){
+    err.textContent = '❌ Nywila hazifanani!';
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  setLoading(btn, true);
+
+  auth.createUserWithEmailAndPassword(e, p)
+    .then(cred => {
+      return cred.user.updateProfile({ displayName: n }).then(() => cred.user);
+    })
+    .then(user => {
+      return db.collection('users').doc(user.uid).set({
+        name: n,
+        email: e,
+        phone: phone,
+        country: country,
+        role: role,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    })
+    .then(() => {
+      setLoading(btn, false, '🎉 Fungua Akaunti');
+      go('home');
+    })
+    .catch(errObj => {
+      setLoading(btn, false, '🎉 Fungua Akaunti');
+      err.textContent = friendlyError(errObj.code);
+      err.style.display = 'block';
+    });
+}
+
+function doGoogleLogin(){
+  auth.signInWithPopup(googleProvider)
+    .then(cred => {
+      const user = cred.user;
+      return db.collection('users').doc(user.uid).set({
+        name: user.displayName || '',
+        email: user.email || '',
+        photo: user.photoURL || '',
+        provider: 'google',
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    })
+    .then(() => go('home'))
+    .catch(errObj => {
+      alert(friendlyError(errObj.code));
+    });
+}
+document.getElementById('googleBtnSplash').addEventListener('click', doGoogleLogin);
+document.getElementById('googleBtnLogin').addEventListener('click', doGoogleLogin);
+
+function doReset(){
+  const e = document.getElementById('resetemail').value.trim();
+  const err = document.getElementById('reseterr');
+  const success = document.getElementById('resetsuccess');
+  const btn = document.getElementById('resetBtn');
+
+  if(!e){
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  setLoading(btn, true);
+
+  auth.sendPasswordResetEmail(e)
+    .then(() => {
+      setLoading(btn, false, '📨 Tuma Link');
+      success.style.display = 'block';
+      setTimeout(() => { go('login'); success.style.display='none'; }, 2500);
+    })
+    .catch(errObj => {
+      setLoading(btn, false, '📨 Tuma Link');
+      err.textContent = friendlyError(errObj.code);
+      err.style.display = 'block';
+    });
+}
+
+function doLogout(){
+  auth.signOut().then(() => go('splash'));
+}
+
+auth.onAuthStateChanged(user => {
+  if(user){
+    const name = user.displayName || (user.email ? user.email.split('@')[0] : 'Mtumiaji');
+    const initial = name.charAt(0).toUpperCase();
+    document.getElementById('homeUserName').textContent = name;
+    document.getElementById('homeAvatar').textContent = initial;
+    document.getElementById('profileName').textContent = name;
+    document.getElementById('profileEmail').textContent = user.email || '';
+    document.getElementById('profileAvatar').textContent = initial;
+
+    const activeId = document.querySelector('.screen.active').id;
+    if(['splash','login','register'].includes(activeId)){
+      go('home');
+    }
+  }
+});
+
+function doPay(){ go('paysuccess'); }
+function doMpesa(){
+  const p = document.getElementById('mpesaphone').value;
+  const err = document.getElementById('mpesaerr');
+  if(!p){ err.style.display='block'; return; }
+  err.style.display='none';
+  go('paysuccess');
+}
 </script>
 </body>
 </html>
