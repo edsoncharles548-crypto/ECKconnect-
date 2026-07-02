@@ -50,22 +50,20 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 .pay-row{display:flex;align-items:center;background:rgba(255,255,255,0.08);border-radius:16px;padding:14px;width:100%;max-width:340px;margin-bottom:10px;cursor:pointer;}
 #introSplash{position:fixed;inset:0;background:radial-gradient(circle at 50% 40%,#16265c 0%,#0D1B3E 70%);z-index:100000;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;transition:opacity .6s ease,visibility .6s ease;}
 #introSplash.hide{opacity:0;visibility:hidden;pointer-events:none;}
-.introEagle{position:absolute;font-size:60px;left:-20vw;top:38vh;animation:eagleFly 2.1s cubic-bezier(.2,.7,.3,1) forwards;filter:drop-shadow(0 0 18px rgba(255,180,60,0.6));}
+.introEagle{position:absolute;font-size:60px;left:-20vw;top:38vh;opacity:0;animation:eagleFly 1.3s cubic-bezier(.2,.7,.3,1) 1.15s forwards;filter:drop-shadow(0 0 18px rgba(255,180,60,0.6));}
 @keyframes eagleFly{
   0%{ transform:translate(0,0) scale(0.6) rotate(-8deg); opacity:0; }
   15%{ opacity:1; }
-  55%{ transform:translate(60vw,-8vh) scale(1.15) rotate(4deg); opacity:1; }
+  60%{ transform:translate(60vw,-8vh) scale(1.15) rotate(4deg); opacity:1; }
   100%{ transform:translate(130vw,-22vh) scale(0.8) rotate(10deg); opacity:0; }
 }
-.introRing{position:absolute;width:220px;height:220px;border-radius:50%;border:2px solid rgba(255,215,0,0.35);animation:ringPulse 2.4s ease-out infinite;}
-.introRing.r2{animation-delay:.6s;}
-.introRing.r3{animation-delay:1.2s;}
-@keyframes ringPulse{
-  0%{ transform:scale(0.3); opacity:0.9; }
-  100%{ transform:scale(1.6); opacity:0; }
+.introLogo{opacity:0;font-size:34px;font-weight:900;background:linear-gradient(135deg,#FF6B6B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:logoSpin 1s cubic-bezier(.25,.8,.3,1) forwards;letter-spacing:0.5px;}
+.introTag{opacity:0;font-size:12px;color:#9090C0;margin-top:8px;animation:logoPop .8s ease 1s forwards;}
+@keyframes logoSpin{
+  0%{ transform:scale(0.3) rotate(0deg); opacity:0; }
+  60%{ transform:scale(1.15) rotate(380deg); opacity:1; }
+  100%{ transform:scale(1) rotate(720deg); opacity:1; }
 }
-.introLogo{opacity:0;font-size:34px;font-weight:900;background:linear-gradient(135deg,#FF6B6B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:logoPop 1s ease .9s forwards;letter-spacing:0.5px;}
-.introTag{opacity:0;font-size:12px;color:#9090C0;margin-top:8px;animation:logoPop .8s ease 1.5s forwards;}
 @keyframes logoPop{
   0%{ transform:scale(0.6) translateY(10px); opacity:0; }
   70%{ transform:scale(1.08) translateY(0); opacity:1; }
@@ -78,11 +76,8 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <body>
 
 <div id="introSplash">
-  <div class="introRing"></div>
-  <div class="introRing r2"></div>
-  <div class="introRing r3"></div>
-  <div class="introEagle">🦅</div>
   <div class="introLogo">ECKconnect 🏠</div>
+  <div class="introEagle">🦅</div>
   <div class="introTag">Pata nyumba • No agents • No fees</div>
 </div>
 
@@ -441,7 +436,7 @@ setTimeout(() => {
     intro.classList.add('hide');
     setTimeout(() => { intro.style.display = 'none'; }, 700);
   }
-}, 2400);
+}, 2700);
 
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
