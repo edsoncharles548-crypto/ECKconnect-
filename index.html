@@ -713,7 +713,7 @@ function doPost(){
   dlog('⏳ doPost: kutuma nyumba kwenda Firestore...');
 
   const user = auth.currentUser;
-  db.collection('listings').add({
+  const writePromise = db.collection('listings').add({
     type: type,
     title: title,
     price: Number(price.replace(/[^0-9]/g,'')) || 0,
@@ -723,7 +723,13 @@ function doPost(){
     ownerId: user.uid,
     ownerName: user.displayName || (user.email ? user.email.split('@')[0] : 'Mmiliki'),
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  })
+  });
+
+  const timeoutPromise = new Promise((_, reject) => {
+    setTimeout(() => reject({code: 'timeout', message: 'Mtandao ni dhaifu sana au umesimama. Jaribu tena kwa mtandao bora.'}), 15000);
+  });
+
+  Promise.race([writePromise, timeoutPromise])
   .then(() => {
     dlog('✅ doPost: imefanikiwa kuhifadhiwa!');
     setLoading(btn, false, '🚀 Weka Sasa!');
