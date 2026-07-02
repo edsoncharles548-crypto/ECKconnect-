@@ -382,6 +382,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+db.settings({ experimentalAutoDetectLongPolling: true, useFetchStreams: false });
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 function dlog(msg){
