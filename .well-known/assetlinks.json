@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.edsoncharles548_crypto.twa",
+        "sha256_cert_fingerprints": ["8D:43:72:D7:1E:59:F4:2B:F3:5C:42:01:4F:B7:A1:98:09:45:D7:CB:7C:A0:DC:B9:AD:01:D9:78:7E:F0:F7:79"]
+      }
+    }]
