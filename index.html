@@ -398,7 +398,10 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
       <div id="editAvatarPreview" style="width:100px;height:100px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;overflow:hidden;cursor:pointer;">E</div>
     </label>
     <div style="text-align:center;margin-top:10px;">
+      <div style="font-size:11px;color:#9090C0;margin-bottom:6px;">📁 Kutoka Gallery:</div>
       <input type="file" id="photoInput" accept="image/*" onchange="handlePhotoSelect(event)" style="color:white;font-size:12px;max-width:260px;">
+      <div style="font-size:11px;color:#9090C0;margin:14px 0 6px;">📷 Au piga picha moja kwa moja:</div>
+      <input type="file" id="photoInputCamera" accept="image/*" capture="user" onchange="handlePhotoSelect(event)" style="color:white;font-size:12px;max-width:260px;">
     </div>
   </div>
   <input class="input" type="text" placeholder="👤 Jina lako kamili" id="editName">
