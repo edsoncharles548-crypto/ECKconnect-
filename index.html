@@ -357,7 +357,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <div class="screen" id="profile" style="justify-content:flex-start;padding-top:60px;padding-bottom:80px;">
   <div style="width:100%;max-width:340px;">
     <div style="text-align:center;padding:20px 0;">
-      <div id="profileAvatar" style="width:90px;height:90px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;margin:0 auto 12px;box-shadow:0 0 40px rgba(142,36,170,0.7);">E</div>
+      <div id="profileAvatar" onclick="openEditProfile()" style="width:90px;height:90px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;margin:0 auto 12px;box-shadow:0 0 40px rgba(142,36,170,0.7);overflow:hidden;cursor:pointer;">E</div>
       <div id="profileName" style="font-size:20px;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Edson Charles</div>
       <div id="profileEmail" style="font-size:12px;color:#9090C0;margin-top:4px;">edsoncharles548@gmail.com</div>
       <div style="font-size:12px;color:#9090C0;">Dar es Salaam 🇹🇿</div>
@@ -365,6 +365,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
         <span style="padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(0,200,83,0.15);color:#00C853;border:1px solid rgba(0,200,83,0.3);">✅ Verified</span>
         <span style="padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(255,140,0,0.15);color:#FF8C00;border:1px solid rgba(255,140,0,0.3);">🏠 Owner</span>
       </div>
+      <button class="btn btn-outline" style="width:auto;padding:8px 20px;font-size:12px;margin:12px auto 0;" onclick="openEditProfile()">✏️ Edit Profile</button>
     </div>
     <div style="display:flex;justify-content:space-around;background:rgba(255,255,255,0.08);border-radius:16px;padding:14px;margin-bottom:16px;">
       <div style="text-align:center;"><div style="font-size:20px;font-weight:900;color:#FFD700;">3</div><div style="font-size:10px;color:#9090C0;">Listings</div></div>
@@ -388,7 +389,19 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   </div>
 </div>
 
-<!-- ============== FIREBASE ============== -->
+<!-- EDIT PROFILE -->
+<div class="screen" id="editprofile">
+  <button class="btn btn-back" onclick="go('profile')">← Rudi</button>
+  <div class="title" style="font-size:24px;">✏️ Edit Profile</div>
+  <div style="position:relative;margin:0 auto 20px;">
+    <div id="editAvatarPreview" style="width:100px;height:100px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;overflow:hidden;cursor:pointer;" onclick="document.getElementById('photoInput').click()">E</div>
+    <div style="text-align:center;font-size:11px;color:#9090C0;margin-top:8px;cursor:pointer;" onclick="document.getElementById('photoInput').click()">📸 Badilisha picha</div>
+    <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)">
+  </div>
+  <input class="input" type="text" placeholder="👤 Jina lako kamili" id="editName">
+  <div class="error" id="editerr">❌ Weka jina!</div>
+  <button class="btn btn-rainbow" id="saveProfileBtn" onclick="saveProfile()">💾 Hifadhi Mabadiliko</button>
+</div>
 <!-- Firebase SDK (compat version - rahisi kutumia na code ya kawaida ya JS) -->
 <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
@@ -617,6 +630,111 @@ function doLogout(){
   auth.signOut().then(() => go('splash'));
 }
 
+let currentUserPhoto = null; // holds base64 data URL while editing
+
+function setAvatarDisplay(elId, initial, photoDataUrl){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  if(photoDataUrl){
+    el.innerHTML = '<img src="' + photoDataUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+  } else {
+    el.innerHTML = initial;
+  }
+}
+
+function loadUserProfilePhoto(uid, initial, name){
+  db.collection('users').doc(uid).get()
+    .then(doc => {
+      const photo = doc.exists ? doc.data().photoBase64 : null;
+      currentUserPhoto = photo || null;
+      setAvatarDisplay('homeAvatar', initial, photo);
+      setAvatarDisplay('profileAvatar', initial, photo);
+    })
+    .catch(err => console.log('loadUserProfilePhoto error:', err));
+}
+
+function openEditProfile(){
+  const user = auth.currentUser;
+  if(!user) return;
+  document.getElementById('editName').value = user.displayName || '';
+  const initial = (user.displayName || (user.email ? user.email.split('@')[0] : 'M')).charAt(0).toUpperCase();
+  setAvatarDisplay('editAvatarPreview', initial, currentUserPhoto);
+  document.getElementById('editerr').style.display = 'none';
+  go('editprofile');
+}
+
+function handlePhotoSelect(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const size = 200;
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const scale = Math.max(size / img.width, size / img.height);
+      const w = img.width * scale, h = img.height * scale;
+      ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+      currentUserPhoto = dataUrl;
+      setAvatarDisplay('editAvatarPreview', '', dataUrl);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveProfile(){
+  const name = document.getElementById('editName').value.trim();
+  const err = document.getElementById('editerr');
+  const btn = document.getElementById('saveProfileBtn');
+  if(!name){
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  setLoading(btn, true);
+
+  const user = auth.currentUser;
+  const timeoutPromise = new Promise((_, reject) => {
+    setTimeout(() => reject({message: 'Mtandao ni dhaifu. Jaribu tena.'}), 20000);
+  });
+
+  const savePromise = user.updateProfile({ displayName: name }).then(() => user.getIdToken()).then(idToken => {
+    const fields = toFirestoreFields({ name: name });
+    if(currentUserPhoto) fields.photoBase64 = { stringValue: currentUserPhoto };
+    const mask = 'updateMask.fieldPaths=name' + (currentUserPhoto ? '&updateMask.fieldPaths=photoBase64' : '');
+    const url = 'https://firestore.googleapis.com/v1/projects/' + firebaseConfig.projectId + '/databases/(default)/documents/users/' + user.uid + '?' + mask;
+    return fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+      body: JSON.stringify({ fields: fields })
+    }).then(res => {
+      if(!res.ok) return res.json().then(e => { throw {message: (e.error && e.error.message) || res.statusText}; });
+      return res.json();
+    });
+  });
+
+  Promise.race([savePromise, timeoutPromise])
+  .then(() => {
+    setLoading(btn, false, '💾 Hifadhi Mabadiliko');
+    const initial = name.charAt(0).toUpperCase();
+    document.getElementById('homeUserName').textContent = name;
+    document.getElementById('profileName').textContent = name;
+    setAvatarDisplay('homeAvatar', initial, currentUserPhoto);
+    setAvatarDisplay('profileAvatar', initial, currentUserPhoto);
+    go('profile');
+  })
+  .catch(errObj => {
+    setLoading(btn, false, '💾 Hifadhi Mabadiliko');
+    err.textContent = '❌ Imeshindwa: ' + (errObj.message || 'jaribu tena');
+    err.style.display = 'block';
+  });
+}
+
 /* ============================================================
    8. AUTH STATE — inaangalia kama mtu ameshaingia tayari
    na kusasisha jina/picha kwenye Home na Profile
@@ -626,10 +744,11 @@ auth.onAuthStateChanged(user => {
     const name = user.displayName || (user.email ? user.email.split('@')[0] : 'Mtumiaji');
     const initial = name.charAt(0).toUpperCase();
     document.getElementById('homeUserName').textContent = name;
-    document.getElementById('homeAvatar').textContent = initial;
     document.getElementById('profileName').textContent = name;
     document.getElementById('profileEmail').textContent = user.email || '';
-    document.getElementById('profileAvatar').textContent = initial;
+    setAvatarDisplay('homeAvatar', initial, null);
+    setAvatarDisplay('profileAvatar', initial, null);
+    loadUserProfilePhoto(user.uid, initial, name);
 
     // Kama tuko kwenye splash/login/register wakati session tayari ipo, peleka home
     const activeId = document.querySelector('.screen.active').id;
