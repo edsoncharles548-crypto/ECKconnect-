@@ -88,9 +88,9 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <div class="sub">Pata nyumba — moja kwa moja na mwenye</div>
   <div class="sub">Trouvez votre maison — sans agents</div>
   <div class="langs">
-    <span class="lang l1">🇬🇧 EN</span>
-    <span class="lang l2">🇹🇿 SW</span>
-    <span class="lang l3">🇫🇷 FR</span>
+    <span class="lang l1" onclick="setLanguage('en')" style="cursor:pointer;">🇬🇧 EN</span>
+    <span class="lang l2" onclick="setLanguage('sw')" style="cursor:pointer;">🇹🇿 SW</span>
+    <span class="lang l3" onclick="setLanguage('fr')" style="cursor:pointer;">🇫🇷 FR</span>
   </div>
   <button class="btn btn-rainbow" onclick="go('login')">🔑 Login / Ingia</button>
   <button class="btn btn-outline" onclick="go('register')">📝 Register / Jisajili</button>
@@ -103,12 +103,12 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <!-- LOGIN -->
 <div class="screen" id="login">
   <button class="btn btn-back" onclick="go('splash')">← Rudi</button>
-  <div class="title">🔐 Login</div>
+  <div class="title" data-i18n="login_title">🔐 Login</div>
   <div class="sub" style="margin-bottom:20px;">Karibu tena / Welcome back</div>
   <input class="input" type="email" placeholder="📧 Email yako" id="lemail">
   <input class="input" type="password" placeholder="🔒 Nywila / Password" id="lpass">
   <div class="error" id="lerr">❌ Jaza email na nywila!</div>
-  <button class="btn btn-rainbow" id="loginBtn" onclick="doLogin()">🚀 Ingia / Login</button>
+  <button class="btn btn-rainbow" id="loginBtn" onclick="doLogin()" data-i18n="login_btn">🚀 Ingia / Login</button>
   <div class="divider">or</div>
   <button class="btn btn-outline" id="googleBtnLogin" style="border-color:#4285F4;color:#4285F4;">G Google</button>
   <div style="text-align:center;margin-top:12px;font-size:13px;color:#9090C0;">Huna akaunti? <span style="color:#FF8C00;cursor:pointer;font-weight:800;" onclick="go('register')">Jisajili</span></div>
@@ -118,7 +118,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <!-- REGISTER -->
 <div class="screen" id="register">
   <button class="btn btn-back" onclick="go('splash')">← Rudi</button>
-  <div class="title">📝 Jisajili</div>
+  <div class="title" data-i18n="register_title">📝 Jisajili</div>
   <div class="sub" style="margin-bottom:20px;">Join ECKconnect — Bure!</div>
   <input class="input" type="text" placeholder="👤 Jina lako kamili" id="rname">
   <input class="input" type="email" placeholder="📧 Email" id="remail">
@@ -138,7 +138,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <input class="input" type="password" placeholder="🔒 Nywila (min 8)" id="rpass">
   <input class="input" type="password" placeholder="✅ Thibitisha nywila" id="rpass2">
   <div class="error" id="rerr">❌ Jaza sehemu zote!</div>
-  <button class="btn btn-rainbow" id="registerBtn" onclick="doRegister()">🎉 Fungua Akaunti</button>
+  <button class="btn btn-rainbow" id="registerBtn" onclick="doRegister()" data-i18n="register_btn">🎉 Fungua Akaunti</button>
   <div style="text-align:center;margin-top:12px;font-size:13px;color:#9090C0;">Una akaunti? <span style="color:#FF8C00;cursor:pointer;font-weight:800;" onclick="go('login')">Ingia</span></div>
 </div>
 
@@ -159,21 +159,21 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <div style="width:100%;max-width:340px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
       <div>
-        <div style="font-size:12px;color:#9090C0;">Karibu 👋</div>
+        <div style="font-size:12px;color:#9090C0;" data-i18n="home_welcome">Karibu 👋</div>
         <div id="homeUserName" style="font-size:22px;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ECKconnect</div>
       </div>
       <div onclick="go('profile')" id="homeAvatar" style="width:44px;height:44px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;">E</div>
     </div>
     <div style="display:flex;align-items:center;background:rgba(255,255,255,0.1);border-radius:14px;padding:12px 16px;margin-bottom:16px;">
       <span style="margin-right:8px;">🔍</span>
-      <input style="background:none;border:none;outline:none;color:white;font-family:'Nunito',sans-serif;font-size:14px;flex:1;" placeholder="Tafuta nyumba... / Search...">
+      <input style="background:none;border:none;outline:none;color:white;font-family:'Nunito',sans-serif;font-size:14px;flex:1;" placeholder="Tafuta nyumba... / Search..." data-i18n-placeholder="search_placeholder">
     </div>
     <div style="display:flex;justify-content:space-around;background:rgba(255,255,255,0.08);border-radius:16px;padding:14px;margin-bottom:16px;">
       <div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:#FFD700;">2,450+</div><div style="font-size:10px;color:#9090C0;">Nyumba</div></div>
       <div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:#FFD700;">1,200+</div><div style="font-size:10px;color:#9090C0;">Wamiliki</div></div>
       <div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:#FFD700;">15+</div><div style="font-size:10px;color:#9090C0;">Miji</div></div>
     </div>
-    <div style="font-size:16px;font-weight:800;margin-bottom:12px;">🏠 Nyumba Zilizochaguliwa</div>
+    <div style="font-size:16px;font-weight:800;margin-bottom:12px;" data-i18n="home_listings_heading">🏠 Nyumba Zilizochaguliwa</div>
     <div id="homeListings"><div style="text-align:center;color:#9090C0;font-size:13px;padding:20px 0;">Inapakia nyumba...</div></div>
     <a href="https://wa.me/255684253244" class="btn btn-green">💬 Wasiliana WhatsApp</a>
   </div>
@@ -216,7 +216,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <!-- SEARCH -->
 <div class="screen" id="search" style="justify-content:flex-start;padding-top:60px;padding-bottom:80px;">
   <div style="width:100%;max-width:340px;">
-    <div style="font-size:20px;font-weight:800;margin-bottom:16px;">🔍 Tafuta Nyumba</div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:16px;" data-i18n="search_heading">🔍 Tafuta Nyumba</div>
     <div style="display:flex;align-items:center;background:rgba(255,255,255,0.1);border-radius:14px;padding:12px 16px;margin-bottom:12px;">
       <span style="margin-right:8px;">🔍</span>
       <input id="searchInput" oninput="filterSearch(this.value)" style="background:none;border:none;outline:none;color:white;font-family:'Nunito',sans-serif;font-size:14px;flex:1;" placeholder="Mji, eneo, bei...">
@@ -260,7 +260,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <!-- POST -->
 <div class="screen" id="post" style="justify-content:flex-start;padding-top:60px;padding-bottom:80px;">
   <div style="width:100%;max-width:340px;">
-    <div style="font-size:20px;font-weight:800;margin-bottom:16px;">➕ Weka Nyumba</div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:16px;" data-i18n="post_heading">➕ Weka Nyumba</div>
     <select class="input" style="appearance:none;" id="ptype"><option>🏡 Nyumba ya Kupanga</option><option>🏡 Nyumba ya Kuuza</option><option>🛏️ Chumba</option><option>🏢 Biashara</option></select>
     <input class="input" type="text" placeholder="Kichwa / Title" id="ptitle">
     <input class="input" type="text" placeholder="Bei / Price (TZS)" id="pprice">
@@ -283,7 +283,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <!-- PAYMENTS -->
 <div class="screen" id="payments" style="justify-content:flex-start;padding-top:60px;padding-bottom:80px;">
   <div style="width:100%;max-width:340px;">
-    <div style="font-size:20px;font-weight:800;margin-bottom:16px;">💳 Malipo / Payments</div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:16px;" data-i18n="payments_heading">💳 Malipo / Payments</div>
     <div style="background:linear-gradient(135deg,rgba(255,59,59,0.2),rgba(142,36,170,0.2));border:1px solid rgba(255,59,59,0.3);border-radius:18px;padding:18px;text-align:center;margin-bottom:16px;">
       <div style="font-size:12px;color:#9090C0;">Kiasi / Amount</div>
       <div style="font-size:32px;font-weight:900;color:#FFD700;">TZS 800,000</div>
@@ -376,7 +376,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="go('payments')"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">💳</span><div><div style="font-size:14px;font-weight:700;">Malipo / Payments</div><div style="font-size:11px;color:#9090C0;">Bank, M-Pesa, Airtel</div></div></div><span style="color:#9090C0;">›</span></div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏠</span><div><div style="font-size:14px;font-weight:700;">Nyumba Zangu</div><div style="font-size:11px;color:#9090C0;">3 active listings</div></div></div><span style="color:#9090C0;">›</span></div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">❤️</span><div><div style="font-size:14px;font-weight:700;">Zilizohifadhiwa</div><div style="font-size:11px;color:#9090C0;">12 properties</div></div></div><span style="color:#9090C0;">›</span></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🌍</span><div><div style="font-size:14px;font-weight:700;">Lugha / Language</div><div style="font-size:11px;color:#9090C0;">SW / EN / FR</div></div></div><span style="color:#9090C0;">›</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="go('language')"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🌍</span><div><div style="font-size:14px;font-weight:700;">Lugha / Language</div><div style="font-size:11px;color:#9090C0;">SW / EN / FR</div></div></div><span style="color:#9090C0;">›</span></div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="doLogout()"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🚪</span><div><div style="font-size:14px;font-weight:700;color:#FF3B3B;">Toka / Logout</div></div></div><span style="color:#FF3B3B;">›</span></div>
     </div>
   </div>
@@ -387,6 +387,16 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
     <div class="bni" onclick="go('messages')"><div class="bni-icon">💬</div><div class="bni-label">Chat</div></div>
     <div class="bni on" onclick="go('profile')"><div class="bni-icon">👤</div><div class="bni-label">Profile</div></div>
   </div>
+</div>
+
+<!-- LANGUAGE -->
+<div class="screen" id="language">
+  <button class="btn btn-back" onclick="go('profile')">← Rudi / Back / Retour</button>
+  <div class="title" style="font-size:24px;">🌍 Chagua Lugha</div>
+  <div class="sub" style="margin-bottom:20px;">Choose Language / Choisir la langue</div>
+  <button class="btn btn-outline" style="border-color:#FF6B6B;color:white;" onclick="setLanguage('en'); go('profile')">🇬🇧 English</button>
+  <button class="btn btn-outline" style="border-color:#00C853;color:white;" onclick="setLanguage('sw'); go('profile')">🇹🇿 Kiswahili</button>
+  <button class="btn btn-outline" style="border-color:#6699FF;color:white;" onclick="setLanguage('fr'); go('profile')">🇫🇷 Français</button>
 </div>
 
 <!-- EDIT PROFILE -->
@@ -443,6 +453,67 @@ dlog('✅ Firebase imeanzishwa (init OK)');
 /* ============================================================
    2. NAVIGATION (kama ilivyokuwa)
    ============================================================ */
+/* ============================================================
+   LANGUAGE / TAFSIRI
+   ============================================================ */
+const translations = {
+  en: {
+    login_title: '🔐 Login',
+    login_btn: '🚀 Login',
+    register_title: '📝 Register',
+    register_btn: '🎉 Create Account',
+    home_welcome: 'Welcome 👋',
+    search_placeholder: 'Search for a house...',
+    home_listings_heading: '🏠 Featured Homes',
+    search_heading: '🔍 Search Homes',
+    post_heading: '➕ Post a Home',
+    payments_heading: '💳 Payments'
+  },
+  sw: {
+    login_title: '🔐 Login',
+    login_btn: '🚀 Ingia / Login',
+    register_title: '📝 Jisajili',
+    register_btn: '🎉 Fungua Akaunti',
+    home_welcome: 'Karibu 👋',
+    search_placeholder: 'Tafuta nyumba... / Search...',
+    home_listings_heading: '🏠 Nyumba Zilizochaguliwa',
+    search_heading: '🔍 Tafuta Nyumba',
+    post_heading: '➕ Weka Nyumba',
+    payments_heading: '💳 Malipo / Payments'
+  },
+  fr: {
+    login_title: '🔐 Connexion',
+    login_btn: '🚀 Se connecter',
+    register_title: '📝 Inscription',
+    register_btn: '🎉 Créer un compte',
+    home_welcome: 'Bienvenue 👋',
+    search_placeholder: 'Rechercher une maison...',
+    home_listings_heading: '🏠 Maisons en vedette',
+    search_heading: '🔍 Rechercher',
+    post_heading: '➕ Publier une maison',
+    payments_heading: '💳 Paiements'
+  }
+};
+
+function setLanguage(lang){
+  const dict = translations[lang] || translations.sw;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(dict[key]) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(dict[key]) el.placeholder = dict[key];
+  });
+  try { localStorage.setItem('eck_lang', lang); } catch(e){}
+}
+
+(function initLanguage(){
+  let saved = 'sw';
+  try { saved = localStorage.getItem('eck_lang') || 'sw'; } catch(e){}
+  setLanguage(saved);
+})();
+
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
