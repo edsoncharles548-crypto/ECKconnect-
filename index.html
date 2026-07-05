@@ -105,9 +105,9 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <div class="screen" id="login">
   <button class="btn btn-back" onclick="go('splash')">← Rudi</button>
   <div class="title" data-i18n="login_title">🔐 Login</div>
-  <div class="sub" style="margin-bottom:20px;">Karibu tena / Welcome back</div>
-  <input class="input" type="email" placeholder="📧 Email yako" id="lemail">
-  <input class="input" type="password" placeholder="🔒 Nywila / Password" id="lpass">
+  <div class="sub" style="margin-bottom:20px;" data-i18n="login_sub">Karibu tena / Welcome back</div>
+  <input class="input" type="email" placeholder="📧 Email yako" id="lemail" data-i18n-placeholder="email_placeholder">
+  <input class="input" type="password" placeholder="🔒 Nywila / Password" id="lpass" data-i18n-placeholder="password_placeholder">
   <div class="error" id="lerr">❌ Jaza email na nywila!</div>
   <button class="btn btn-rainbow" id="loginBtn" onclick="doLogin()" data-i18n="login_btn">🚀 Ingia / Login</button>
   <div class="divider">or</div>
@@ -120,10 +120,10 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <div class="screen" id="register">
   <button class="btn btn-back" onclick="go('splash')">← Rudi</button>
   <div class="title" data-i18n="register_title">📝 Jisajili</div>
-  <div class="sub" style="margin-bottom:20px;">Join ECKconnect — Bure!</div>
-  <input class="input" type="text" placeholder="👤 Jina lako kamili" id="rname">
-  <input class="input" type="email" placeholder="📧 Email" id="remail">
-  <input class="input" type="tel" placeholder="📱 Simu (+255...)" id="rphone">
+  <div class="sub" style="margin-bottom:20px;" data-i18n="register_sub">Join ECKconnect — Bure!</div>
+  <input class="input" type="text" placeholder="👤 Jina lako kamili" id="rname" data-i18n-placeholder="fullname_placeholder">
+  <input class="input" type="email" placeholder="📧 Email" id="remail" data-i18n-placeholder="email_short_placeholder">
+  <input class="input" type="tel" placeholder="📱 Simu (+255...)" id="rphone" data-i18n-placeholder="phone_placeholder">
   <select class="input" style="appearance:none;" id="rcountry">
     <option>🇹🇿 Tanzania</option>
     <option>🇨🇩 Congo DRC</option>
@@ -136,8 +136,8 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
     <option>🏠 Mwenye nyumba</option>
     <option>👥 Zote mbili</option>
   </select>
-  <input class="input" type="password" placeholder="🔒 Nywila (min 8)" id="rpass">
-  <input class="input" type="password" placeholder="✅ Thibitisha nywila" id="rpass2">
+  <input class="input" type="password" placeholder="🔒 Nywila (min 8)" id="rpass" data-i18n-placeholder="password_min_placeholder">
+  <input class="input" type="password" placeholder="✅ Thibitisha nywila" id="rpass2" data-i18n-placeholder="confirm_password_placeholder">
   <div class="error" id="rerr">❌ Jaza sehemu zote!</div>
   <button class="btn btn-rainbow" id="registerBtn" onclick="doRegister()" data-i18n="register_btn">🎉 Fungua Akaunti</button>
   <div style="text-align:center;margin-top:12px;font-size:13px;color:#9090C0;">Una akaunti? <span style="color:#FF8C00;cursor:pointer;font-weight:800;" onclick="go('login')">Ingia</span></div>
@@ -147,8 +147,8 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <div class="screen" id="reset">
   <button class="btn btn-back" onclick="go('login')">← Rudi</button>
   <div style="font-size:56px;text-align:center;margin-bottom:16px;">🔑</div>
-  <div class="title">Reset Nywila</div>
-  <div class="sub" style="margin-bottom:20px;">Weka email yako</div>
+  <div class="title" data-i18n="reset_title">Reset Nywila</div>
+  <div class="sub" style="margin-bottom:20px;" data-i18n="reset_sub">Weka email yako</div>
   <input class="input" type="email" placeholder="📧 Email yako" id="resetemail">
   <div class="error" id="reseterr">❌ Weka email sahihi!</div>
   <div id="resetsuccess" style="display:none;" class="success">✅ Link imetumwa! Angalia email yako!</div>
@@ -237,7 +237,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <!-- MESSAGES -->
 <div class="screen" id="messages" style="justify-content:flex-start;padding-top:60px;padding-bottom:80px;">
   <div style="width:100%;max-width:340px;">
-    <div style="font-size:20px;font-weight:800;margin-bottom:16px;">💬 Ujumbe / Messages</div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:16px;" data-i18n="messages_heading">💬 Ujumbe / Messages</div>
     <div id="chatListContainer"><div style="text-align:center;color:#9090C0;font-size:13px;padding:20px 0;">Inapakia mazungumzo...</div></div>
     <a href="https://wa.me/255684253244" class="btn btn-green" style="margin-top:12px;">💬 Wasiliana WhatsApp</a>
   </div>
@@ -260,7 +260,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
     </div>
     <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px;"></div>
     <div style="display:flex;gap:8px;padding:12px 16px;background:rgba(255,255,255,0.05);">
-      <input id="chatInput" type="text" placeholder="Andika ujumbe..." style="flex:1;padding:12px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;font-family:'Nunito',sans-serif;font-size:14px;outline:none;" onkeypress="if(event.key==='Enter')sendChatMessage()">
+      <input id="chatInput" type="text" placeholder="Andika ujumbe..." data-i18n-placeholder="chat_input_placeholder" style="flex:1;padding:12px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;font-family:'Nunito',sans-serif;font-size:14px;outline:none;" onkeypress="if(event.key==='Enter')sendChatMessage()">
       <button class="btn btn-rainbow" style="width:auto;margin:0;padding:12px 18px;" onclick="sendChatMessage()">➤</button>
     </div>
   </div>
@@ -271,15 +271,15 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <div style="width:100%;max-width:340px;">
     <div style="font-size:20px;font-weight:800;margin-bottom:16px;" data-i18n="post_heading">➕ Weka Nyumba</div>
     <select class="input" style="appearance:none;" id="ptype"><option>🏡 Nyumba ya Kupanga</option><option>🏡 Nyumba ya Kuuza</option><option>🛏️ Chumba</option><option>🏢 Biashara</option></select>
-    <input class="input" type="text" placeholder="Kichwa / Title" id="ptitle">
-    <input class="input" type="text" placeholder="Bei / Price (TZS)" id="pprice">
-    <input class="input" type="text" placeholder="Mji na Mtaa / City & Area" id="plocation">
-    <input class="input" type="number" placeholder="Idadi ya vyumba / Bedrooms" id="pbeds">
-    <textarea class="input" rows="3" placeholder="Maelezo / Description..." id="pdesc"></textarea>
+    <input class="input" type="text" placeholder="Kichwa / Title" id="ptitle" data-i18n-placeholder="title_placeholder">
+    <input class="input" type="text" placeholder="Bei / Price (TZS)" id="pprice" data-i18n-placeholder="price_placeholder">
+    <input class="input" type="text" placeholder="Mji na Mtaa / City & Area" id="plocation" data-i18n-placeholder="location_placeholder">
+    <input class="input" type="number" placeholder="Idadi ya vyumba / Bedrooms" id="pbeds" data-i18n-placeholder="bedrooms_placeholder">
+    <textarea class="input" rows="3" placeholder="Maelezo / Description..." id="pdesc" data-i18n-placeholder="description_placeholder"></textarea>
     <div class="error" id="posterr">❌ Jaza sehemu zote muhimu!</div>
     <div style="background:rgba(255,255,255,0.08);border:2px dashed rgba(142,36,170,0.4);border-radius:14px;padding:18px;text-align:center;margin-bottom:12px;">
       <div id="listingPhotoPreview" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;font-size:32px;">📸</div>
-      <div style="font-size:12px;color:#9090C0;margin-bottom:8px;">Weka picha za nyumba (unaweza kuchagua nyingi mara moja)</div>
+      <div style="font-size:12px;color:#9090C0;margin-bottom:8px;" data-i18n="listing_photo_hint">Weka picha za nyumba (unaweza kuchagua nyingi mara moja)</div>
       <input type="file" id="listingPhotoInput" multiple onchange="handleListingPhotoSelect(event)" style="color:white;font-size:12px;max-width:260px;">
     </div>
     <button class="btn btn-rainbow" id="postBtn" onclick="doPost()">🚀 Weka Sasa!</button>
@@ -302,10 +302,10 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
       <div style="font-size:32px;font-weight:900;color:#FFD700;">TZS 800,000</div>
       <div style="font-size:11px;color:#9090C0;">Rent — Dar es Salaam</div>
     </div>
-    <div class="pay-row" onclick="go('bank')"><div class="pay-icon" style="background:linear-gradient(135deg,#1A5276,#1565C0);">🏦</div><div><div style="font-size:15px;font-weight:800;">Bank Transfer</div><div style="font-size:11px;color:#9090C0;">CRDB • NMB • NBC</div></div><div style="margin-left:auto;color:#9090C0;font-size:20px;">›</div></div>
-    <div class="pay-row" onclick="go('mpesa')"><div class="pay-icon" style="background:linear-gradient(135deg,#00a651,#007a3d);">📱</div><div><div style="font-size:15px;font-weight:800;">M-Pesa / Tigo</div><div style="font-size:11px;color:#9090C0;">Mobile money Tanzania</div></div><div style="margin-left:auto;color:#9090C0;font-size:20px;">›</div></div>
-    <div class="pay-row" onclick="go('mpesa')"><div class="pay-icon" style="background:linear-gradient(135deg,#FF3B3B,#CC0000);">📲</div><div><div style="font-size:15px;font-weight:800;">Airtel Money</div><div style="font-size:11px;color:#9090C0;">+255 684 253 244</div></div><div style="margin-left:auto;color:#9090C0;font-size:20px;">›</div></div>
-    <div style="text-align:center;font-size:11px;color:#9090C0;margin-top:12px;">🔒 Secure • SSL Encrypted • Safe</div>
+    <div class="pay-row" onclick="go('bank')"><div class="pay-icon" style="background:linear-gradient(135deg,#1A5276,#1565C0);">🏦</div><div><div style="font-size:15px;font-weight:800;" data-i18n="bank_transfer_title">Bank Transfer</div><div style="font-size:11px;color:#9090C0;" data-i18n="bank_transfer_sub">CRDB • NMB • NBC</div></div><div style="margin-left:auto;color:#9090C0;font-size:20px;">›</div></div>
+    <div class="pay-row" onclick="go('mpesa')"><div class="pay-icon" style="background:linear-gradient(135deg,#00a651,#007a3d);">📱</div><div><div style="font-size:15px;font-weight:800;" data-i18n="mpesa_title">M-Pesa / Tigo</div><div style="font-size:11px;color:#9090C0;" data-i18n="mpesa_sub">Mobile money Tanzania</div></div><div style="margin-left:auto;color:#9090C0;font-size:20px;">›</div></div>
+    <div class="pay-row" onclick="go('mpesa')"><div class="pay-icon" style="background:linear-gradient(135deg,#FF3B3B,#CC0000);">📲</div><div><div style="font-size:15px;font-weight:800;" data-i18n="airtel_title">Airtel Money</div><div style="font-size:11px;color:#9090C0;">+255 684 253 244</div></div><div style="margin-left:auto;color:#9090C0;font-size:20px;">›</div></div>
+    <div style="text-align:center;font-size:11px;color:#9090C0;margin-top:12px;" data-i18n="secure_text">🔒 Secure • SSL Encrypted • Safe</div>
     <div style="text-align:center;font-size:10px;color:#7070A0;margin-top:6px;">Note: online card/PayPal checkout kitaunganishwa kwa gateway rasmi baadaye — kwa sasa tumia Bank/M-Pesa/Airtel.</div>
   </div>
   <div class="bnav">
@@ -386,11 +386,11 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
       <div style="text-align:center;"><div style="font-size:20px;font-weight:900;color:#FFD700;">248</div><div style="font-size:10px;color:#9090C0;">Views</div></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="go('payments')"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">💳</span><div><div style="font-size:14px;font-weight:700;">Malipo / Payments</div><div style="font-size:11px;color:#9090C0;">Bank, M-Pesa, Airtel</div></div></div><span style="color:#9090C0;">›</span></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="go('mylistings'); loadMyListings();"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏠</span><div><div style="font-size:14px;font-weight:700;">Nyumba Zangu</div><div style="font-size:11px;color:#9090C0;">Simamia matangazo yako</div></div></div><span style="color:#9090C0;">›</span></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">❤️</span><div><div style="font-size:14px;font-weight:700;">Zilizohifadhiwa</div><div style="font-size:11px;color:#9090C0;">12 properties</div></div></div><span style="color:#9090C0;">›</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="go('payments')"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">💳</span><div><div style="font-size:14px;font-weight:700;" data-i18n="menu_payments">Malipo / Payments</div><div style="font-size:11px;color:#9090C0;" data-i18n="menu_payments_sub">Bank, M-Pesa, Airtel</div></div></div><span style="color:#9090C0;">›</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="go('mylistings'); loadMyListings();"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏠</span><div><div style="font-size:14px;font-weight:700;" data-i18n="menu_mylistings">Nyumba Zangu</div><div style="font-size:11px;color:#9090C0;" data-i18n="menu_mylistings_sub">Simamia matangazo yako</div></div></div><span style="color:#9090C0;">›</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">❤️</span><div><div style="font-size:14px;font-weight:700;" data-i18n="menu_saved">Zilizohifadhiwa</div><div style="font-size:11px;color:#9090C0;" data-i18n="menu_saved_sub">12 properties</div></div></div><span style="color:#9090C0;">›</span></div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="go('language')"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🌍</span><div><div style="font-size:14px;font-weight:700;">Lugha / Language</div><div style="font-size:11px;color:#9090C0;">SW / EN / FR</div></div></div><span style="color:#9090C0;">›</span></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="doLogout()"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🚪</span><div><div style="font-size:14px;font-weight:700;color:#FF3B3B;">Toka / Logout</div></div></div><span style="color:#FF3B3B;">›</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;background:rgba(255,255,255,0.08);border-radius:14px;cursor:pointer;" onclick="doLogout()"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🚪</span><div><div style="font-size:14px;font-weight:700;color:#FF3B3B;" data-i18n="menu_logout">Toka / Logout</div></div></div><span style="color:#FF3B3B;">›</span></div>
     </div>
   </div>
   <div class="bnav">
@@ -406,7 +406,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <div class="screen" id="mylistings" style="justify-content:flex-start;padding-top:60px;padding-bottom:40px;">
   <div style="width:100%;max-width:340px;">
     <button class="btn btn-back" onclick="go('profile')">← Rudi</button>
-    <div style="font-size:20px;font-weight:800;margin-bottom:16px;">🏠 Nyumba Zangu</div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:16px;" data-i18n="mylistings_heading">🏠 Nyumba Zangu</div>
     <div id="myListingsContainer"><div style="text-align:center;color:#9090C0;font-size:13px;padding:20px 0;">Inapakia...</div></div>
   </div>
 </div>
@@ -424,7 +424,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <!-- EDIT PROFILE -->
 <div class="screen" id="editprofile">
   <button class="btn btn-back" onclick="go('profile')">← Rudi</button>
-  <div class="title" style="font-size:24px;">✏️ Edit Profile</div>
+  <div class="title" style="font-size:24px;" data-i18n="editprofile_title">✏️ Edit Profile</div>
   <div style="position:relative;margin:0 auto 20px;">
     <label for="photoInput">
       <div id="editAvatarPreview" style="width:100px;height:100px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;overflow:hidden;cursor:pointer;">E</div>
@@ -436,7 +436,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
       <input type="file" id="photoInputCamera" accept="image/*" capture="user" onchange="handlePhotoSelect(event)" style="color:white;font-size:12px;max-width:260px;">
     </div>
   </div>
-  <input class="input" type="text" placeholder="👤 Jina lako kamili" id="editName">
+  <input class="input" type="text" placeholder="👤 Jina lako kamili" id="editName" data-i18n-placeholder="fullname_placeholder">
   <div class="error" id="editerr">❌ Weka jina!</div>
   <button class="btn btn-rainbow" id="saveProfileBtn" onclick="saveProfile()">💾 Hifadhi Mabadiliko</button>
 </div>
@@ -482,38 +482,140 @@ const translations = {
   en: {
     login_title: '🔐 Login',
     login_btn: '🚀 Login',
+    login_sub: 'Welcome back',
     register_title: '📝 Register',
     register_btn: '🎉 Create Account',
+    register_sub: 'Join ECKconnect — Free!',
     home_welcome: 'Welcome 👋',
     search_placeholder: 'Search for a house...',
     home_listings_heading: '🏠 Featured Homes',
     search_heading: '🔍 Search Homes',
     post_heading: '➕ Post a Home',
-    payments_heading: '💳 Payments'
+    payments_heading: '💳 Payments',
+    email_placeholder: '📧 Your email',
+    password_placeholder: '🔒 Password',
+    fullname_placeholder: '👤 Your full name',
+    email_short_placeholder: '📧 Email',
+    phone_placeholder: '📱 Phone (+255...)',
+    password_min_placeholder: '🔒 Password (min 8)',
+    confirm_password_placeholder: '✅ Confirm password',
+    reset_title: 'Reset Password',
+    reset_sub: 'Enter your email',
+    messages_heading: '💬 Messages',
+    chat_input_placeholder: 'Type a message...',
+    title_placeholder: 'Title',
+    price_placeholder: 'Price (TZS)',
+    location_placeholder: 'City & Area',
+    bedrooms_placeholder: 'Bedrooms',
+    description_placeholder: 'Description...',
+    listing_photo_hint: 'Add house photos (you can pick several at once)',
+    bank_transfer_title: 'Bank Transfer',
+    bank_transfer_sub: 'CRDB • NMB • NBC',
+    mpesa_title: 'M-Pesa / Tigo',
+    mpesa_sub: 'Mobile money Tanzania',
+    airtel_title: 'Airtel Money',
+    secure_text: '🔒 Secure • SSL Encrypted • Safe',
+    menu_payments: 'Payments',
+    menu_payments_sub: 'Bank, M-Pesa, Airtel',
+    menu_mylistings: 'My Listings',
+    menu_mylistings_sub: 'Manage your listings',
+    menu_saved: 'Saved',
+    menu_saved_sub: '12 properties',
+    menu_logout: 'Logout',
+    mylistings_heading: '🏠 My Listings',
+    editprofile_title: '✏️ Edit Profile'
   },
   sw: {
     login_title: '🔐 Login',
     login_btn: '🚀 Ingia / Login',
+    login_sub: 'Karibu tena / Welcome back',
     register_title: '📝 Jisajili',
     register_btn: '🎉 Fungua Akaunti',
+    register_sub: 'Join ECKconnect — Bure!',
     home_welcome: 'Karibu 👋',
     search_placeholder: 'Tafuta nyumba... / Search...',
     home_listings_heading: '🏠 Nyumba Zilizochaguliwa',
     search_heading: '🔍 Tafuta Nyumba',
     post_heading: '➕ Weka Nyumba',
-    payments_heading: '💳 Malipo / Payments'
+    payments_heading: '💳 Malipo / Payments',
+    email_placeholder: '📧 Email yako',
+    password_placeholder: '🔒 Nywila / Password',
+    fullname_placeholder: '👤 Jina lako kamili',
+    email_short_placeholder: '📧 Email',
+    phone_placeholder: '📱 Simu (+255...)',
+    password_min_placeholder: '🔒 Nywila (min 8)',
+    confirm_password_placeholder: '✅ Thibitisha nywila',
+    reset_title: 'Reset Nywila',
+    reset_sub: 'Weka email yako',
+    messages_heading: '💬 Ujumbe / Messages',
+    chat_input_placeholder: 'Andika ujumbe...',
+    title_placeholder: 'Kichwa / Title',
+    price_placeholder: 'Bei / Price (TZS)',
+    location_placeholder: 'Mji na Mtaa / City & Area',
+    bedrooms_placeholder: 'Idadi ya vyumba / Bedrooms',
+    description_placeholder: 'Maelezo / Description...',
+    listing_photo_hint: 'Weka picha za nyumba (unaweza kuchagua nyingi mara moja)',
+    bank_transfer_title: 'Bank Transfer',
+    bank_transfer_sub: 'CRDB • NMB • NBC',
+    mpesa_title: 'M-Pesa / Tigo',
+    mpesa_sub: 'Mobile money Tanzania',
+    airtel_title: 'Airtel Money',
+    secure_text: '🔒 Secure • SSL Encrypted • Safe',
+    menu_payments: 'Malipo / Payments',
+    menu_payments_sub: 'Bank, M-Pesa, Airtel',
+    menu_mylistings: 'Nyumba Zangu',
+    menu_mylistings_sub: 'Simamia matangazo yako',
+    menu_saved: 'Zilizohifadhiwa',
+    menu_saved_sub: '12 properties',
+    menu_logout: 'Toka / Logout',
+    mylistings_heading: '🏠 Nyumba Zangu',
+    editprofile_title: '✏️ Edit Profile'
   },
   fr: {
     login_title: '🔐 Connexion',
     login_btn: '🚀 Se connecter',
+    login_sub: 'Bon retour',
     register_title: '📝 Inscription',
     register_btn: '🎉 Créer un compte',
+    register_sub: 'Rejoignez ECKconnect — Gratuit!',
     home_welcome: 'Bienvenue 👋',
     search_placeholder: 'Rechercher une maison...',
     home_listings_heading: '🏠 Maisons en vedette',
     search_heading: '🔍 Rechercher',
     post_heading: '➕ Publier une maison',
-    payments_heading: '💳 Paiements'
+    payments_heading: '💳 Paiements',
+    email_placeholder: '📧 Votre email',
+    password_placeholder: '🔒 Mot de passe',
+    fullname_placeholder: '👤 Nom complet',
+    email_short_placeholder: '📧 Email',
+    phone_placeholder: '📱 Téléphone (+255...)',
+    password_min_placeholder: '🔒 Mot de passe (min 8)',
+    confirm_password_placeholder: '✅ Confirmer le mot de passe',
+    reset_title: 'Réinitialiser',
+    reset_sub: 'Entrez votre email',
+    messages_heading: '💬 Messages',
+    chat_input_placeholder: 'Écrire un message...',
+    title_placeholder: 'Titre',
+    price_placeholder: 'Prix (TZS)',
+    location_placeholder: 'Ville et quartier',
+    bedrooms_placeholder: 'Chambres',
+    description_placeholder: 'Description...',
+    listing_photo_hint: 'Ajoutez des photos (plusieurs à la fois)',
+    bank_transfer_title: 'Virement bancaire',
+    bank_transfer_sub: 'CRDB • NMB • NBC',
+    mpesa_title: 'M-Pesa / Tigo',
+    mpesa_sub: 'Mobile money Tanzanie',
+    airtel_title: 'Airtel Money',
+    secure_text: '🔒 Sécurisé • SSL • Sûr',
+    menu_payments: 'Paiements',
+    menu_payments_sub: 'Banque, M-Pesa, Airtel',
+    menu_mylistings: 'Mes annonces',
+    menu_mylistings_sub: 'Gérer vos annonces',
+    menu_saved: 'Enregistrés',
+    menu_saved_sub: '12 propriétés',
+    menu_logout: 'Déconnexion',
+    mylistings_heading: '🏠 Mes annonces',
+    editprofile_title: '✏️ Modifier le profil'
   }
 };
 
