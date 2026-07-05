@@ -97,6 +97,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
   <div class="divider">or / au</div>
   <button class="btn btn-outline" id="googleBtnSplash" style="border-color:#4285F4;color:#4285F4;">G Continue with Google</button>
   <a href="https://wa.me/255684253244" class="btn btn-green">💬 WhatsApp ECKconnect</a>
+  <button class="btn btn-outline" id="installBtn" style="display:none;border-color:#FFD700;color:#FFD700;" onclick="installApp()">📲 Sakinisha App / Install App</button>
   <div class="footer">No agents • No fees • Dar es Salaam 🇹🇿</div>
 </div>
 
@@ -190,7 +191,8 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <div class="screen" id="detail" style="justify-content:flex-start;padding-top:20px;padding-bottom:80px;">
   <div style="width:100%;max-width:340px;">
     <button class="btn btn-back" onclick="go('home')">← Rudi</button>
-    <div id="detailPhoto" style="font-size:80px;text-align:center;background:rgba(255,255,255,0.08);border-radius:18px;padding:20px;margin-bottom:16px;">🏡</div>
+    <div id="detailPhoto" style="font-size:80px;text-align:center;background:rgba(255,255,255,0.08);border-radius:18px;padding:20px;margin-bottom:8px;">🏡</div>
+    <div id="detailPhotoStrip" style="display:none;gap:8px;overflow-x:auto;margin-bottom:16px;padding-bottom:4px;"></div>
     <div id="detailPrice" style="font-size:22px;font-weight:900;color:#FFD700;margin-bottom:4px;">TZS 800,000/mwezi</div>
     <div id="detailTitle" style="font-size:18px;font-weight:800;margin-bottom:4px;">Nyumba ya Vyumba 3</div>
     <div id="detailLocation" style="font-size:12px;color:#9090C0;margin-bottom:16px;">📍 Dar es Salaam, Kinondoni 🇹🇿</div>
@@ -276,9 +278,9 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
     <textarea class="input" rows="3" placeholder="Maelezo / Description..." id="pdesc"></textarea>
     <div class="error" id="posterr">❌ Jaza sehemu zote muhimu!</div>
     <div style="background:rgba(255,255,255,0.08);border:2px dashed rgba(142,36,170,0.4);border-radius:14px;padding:18px;text-align:center;margin-bottom:12px;">
-      <div id="listingPhotoPreview" style="font-size:32px;margin-bottom:6px;">📸</div>
-      <div style="font-size:12px;color:#9090C0;margin-bottom:8px;">Weka picha ya nyumba</div>
-      <input type="file" id="listingPhotoInput" onchange="handleListingPhotoSelect(event)" style="color:white;font-size:12px;max-width:260px;">
+      <div id="listingPhotoPreview" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;font-size:32px;">📸</div>
+      <div style="font-size:12px;color:#9090C0;margin-bottom:8px;">Weka picha za nyumba (unaweza kuchagua nyingi mara moja)</div>
+      <input type="file" id="listingPhotoInput" multiple onchange="handleListingPhotoSelect(event)" style="color:white;font-size:12px;max-width:260px;">
     </div>
     <button class="btn btn-rainbow" id="postBtn" onclick="doPost()">🚀 Weka Sasa!</button>
   </div>
@@ -554,6 +556,36 @@ if('serviceWorker' in navigator){
     navigator.serviceWorker.register('service-worker.js').catch(e => console.log('SW registration failed:', e));
   });
 }
+
+/* ============================================================
+   INSTALL APP (PWA)
+   ============================================================ */
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  const btn = document.getElementById('installBtn');
+  if(btn) btn.style.display = 'block';
+});
+
+function installApp(){
+  const btn = document.getElementById('installBtn');
+  if(!deferredInstallPrompt){
+    alert('App tayari imesakinishwa, au kivinjari chako hakiruhusu usakinishaji wa moja kwa moja. Tumia menyu ya Chrome (⋮) → "Add to Home Screen" badala yake.');
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  deferredInstallPrompt.userChoice.then(choice => {
+    deferredInstallPrompt = null;
+    if(btn) btn.style.display = 'none';
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  const btn = document.getElementById('installBtn');
+  if(btn) btn.style.display = 'none';
+});
 
 function setLoading(btn, loading, originalText){
   if(loading){
@@ -939,17 +971,32 @@ function loadListings(){
 
 let currentDetailListing = null;
 
+function switchDetailPhoto(url){
+  const photoEl = document.getElementById('detailPhoto');
+  photoEl.style.padding = '0';
+  photoEl.innerHTML = '<img src="' + url + '" style="width:100%;max-height:220px;object-fit:cover;border-radius:18px;display:block;">';
+}
+
 function showDetail(id){
   const l = allListings.find(x => x.id === id);
   if(!l) return;
   currentDetailListing = l;
   const photoEl = document.getElementById('detailPhoto');
-  if(l.photoBase64){
+  const photos = Array.isArray(l.photos) && l.photos.length ? l.photos : (l.photoBase64 ? [l.photoBase64] : []);
+  if(photos.length){
     photoEl.style.padding = '0';
-    photoEl.innerHTML = '<img src="' + l.photoBase64 + '" style="width:100%;max-height:220px;object-fit:cover;border-radius:18px;display:block;">';
+    photoEl.innerHTML = '<img src="' + photos[0] + '" style="width:100%;max-height:220px;object-fit:cover;border-radius:18px;display:block;">';
   } else {
     photoEl.style.padding = '20px';
     photoEl.innerHTML = '🏡';
+  }
+  const stripEl = document.getElementById('detailPhotoStrip');
+  if(photos.length > 1){
+    stripEl.style.display = 'flex';
+    stripEl.innerHTML = photos.map(p => `<img src="${p}" onclick="switchDetailPhoto('${p}')" style="width:56px;height:56px;object-fit:cover;border-radius:10px;cursor:pointer;flex-shrink:0;">`).join('');
+  } else {
+    stripEl.style.display = 'none';
+    stripEl.innerHTML = '';
   }
   document.getElementById('detailTitle').textContent = l.title || 'Nyumba';
   document.getElementById('detailPrice').textContent = l.price ? ('TZS ' + Number(l.price).toLocaleString() + '/mwezi') : 'Bei: Waliza';
@@ -1192,39 +1239,77 @@ function toFirestoreFields(obj){
 }
 
 let currentEditListingId = null;
-let currentListingPhoto = null;
+let currentListingPhotos = [];
+const MAX_LISTING_PHOTOS = 5;
+
+function resizeImageFile(file, maxSize, quality){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
+        const w = img.width * scale, h = img.height * scale;
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderListingPhotoPreview(){
+  const box = document.getElementById('listingPhotoPreview');
+  if(!currentListingPhotos.length){
+    box.innerHTML = '📸';
+    return;
+  }
+  box.innerHTML = currentListingPhotos.map((p, i) =>
+    `<div style="position:relative;">
+      <img src="${p}" style="width:70px;height:70px;object-fit:cover;border-radius:10px;">
+      <div onclick="removeListingPhoto(${i})" style="position:absolute;top:-6px;right:-6px;background:#FF3B3B;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;">✕</div>
+    </div>`
+  ).join('');
+}
+
+function removeListingPhoto(index){
+  currentListingPhotos.splice(index, 1);
+  renderListingPhotoPreview();
+}
 
 function handleListingPhotoSelect(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      const size = 500;
-      const scale = Math.min(size / img.width, size / img.height, 1);
-      const w = img.width * scale, h = img.height * scale;
-      const canvas = document.createElement('canvas');
-      canvas.width = w;
-      canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      currentListingPhoto = canvas.toDataURL('image/jpeg', 0.6);
-      document.getElementById('listingPhotoPreview').innerHTML = '<img src="' + currentListingPhoto + '" style="max-width:100%;max-height:140px;border-radius:10px;">';
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
+  const files = Array.from(event.target.files || []);
+  const remaining = MAX_LISTING_PHOTOS - currentListingPhotos.length;
+  if(remaining <= 0){
+    alert('Umefikia idadi ya juu ya picha (' + MAX_LISTING_PHOTOS + ').');
+    event.target.value = '';
+    return;
+  }
+  const toProcess = files.slice(0, remaining);
+  Promise.all(toProcess.map(f => resizeImageFile(f, 500, 0.6)))
+    .then(dataUrls => {
+      currentListingPhotos = currentListingPhotos.concat(dataUrls);
+      renderListingPhotoPreview();
+    })
+    .catch(e => console.log('handleListingPhotoSelect error:', e));
+  event.target.value = '';
 }
 
 function resetPostForm(){
   currentEditListingId = null;
-  currentListingPhoto = null;
+  currentListingPhotos = [];
   document.getElementById('ptitle').value = '';
   document.getElementById('pprice').value = '';
   document.getElementById('plocation').value = '';
   document.getElementById('pbeds').value = '';
   document.getElementById('pdesc').value = '';
-  document.getElementById('listingPhotoPreview').innerHTML = '📸';
+  renderListingPhotoPreview();
   document.getElementById('listingPhotoInput').value = '';
   document.getElementById('postBtn').textContent = '🚀 Weka Sasa!';
 }
@@ -1268,12 +1353,15 @@ function doPost(){
       ownerId: user.uid,
       ownerName: user.displayName || (user.email ? user.email.split('@')[0] : 'Mmiliki')
     };
-    if(currentListingPhoto) dataFields.photoBase64 = currentListingPhoto;
+    if(currentListingPhotos.length) dataFields.photoBase64 = currentListingPhotos[0];
     const fields = toFirestoreFields(dataFields);
+    if(currentListingPhotos.length){
+      fields.photos = { arrayValue: { values: currentListingPhotos.map(p => ({ stringValue: p })) } };
+    }
 
     if(isEdit){
       const maskFields = ['type','title','price','location','beds','description'];
-      if(currentListingPhoto) maskFields.push('photoBase64');
+      if(currentListingPhotos.length){ maskFields.push('photoBase64'); maskFields.push('photos'); }
       const mask = maskFields.map(f => 'updateMask.fieldPaths=' + encodeURIComponent(f)).join('&');
       const url = 'https://firestore.googleapis.com/v1/projects/' + firebaseConfig.projectId + '/databases/(default)/documents/listings/' + currentEditListingId + '?' + mask;
       return fetch(url, {
@@ -1317,13 +1405,13 @@ function editListing(id){
   const l = allListings.find(x => x.id === id);
   if(!l) return;
   currentEditListingId = id;
-  currentListingPhoto = null;
+  currentListingPhotos = Array.isArray(l.photos) ? l.photos.slice() : (l.photoBase64 ? [l.photoBase64] : []);
   document.getElementById('ptitle').value = l.title || '';
   document.getElementById('pprice').value = l.price || '';
   document.getElementById('plocation').value = l.location || '';
   document.getElementById('pbeds').value = l.beds || '';
   document.getElementById('pdesc').value = l.description || '';
-  document.getElementById('listingPhotoPreview').innerHTML = l.photoBase64 ? ('<img src="' + l.photoBase64 + '" style="max-width:100%;max-height:140px;border-radius:10px;">') : '📸';
+  renderListingPhotoPreview();
   document.getElementById('postBtn').textContent = '💾 Hifadhi Mabadiliko';
   document.getElementById('posterr').style.display = 'none';
   go('post');
