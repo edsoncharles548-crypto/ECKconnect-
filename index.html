@@ -190,7 +190,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <div class="screen" id="detail" style="justify-content:flex-start;padding-top:20px;padding-bottom:80px;">
   <div style="width:100%;max-width:340px;">
     <button class="btn btn-back" onclick="go('home')">← Rudi</button>
-    <div style="font-size:80px;text-align:center;background:rgba(255,255,255,0.08);border-radius:18px;padding:20px;margin-bottom:16px;">🏡</div>
+    <div id="detailPhoto" style="font-size:80px;text-align:center;background:rgba(255,255,255,0.08);border-radius:18px;padding:20px;margin-bottom:16px;">🏡</div>
     <div id="detailPrice" style="font-size:22px;font-weight:900;color:#FFD700;margin-bottom:4px;">TZS 800,000/mwezi</div>
     <div id="detailTitle" style="font-size:18px;font-weight:800;margin-bottom:4px;">Nyumba ya Vyumba 3</div>
     <div id="detailLocation" style="font-size:12px;color:#9090C0;margin-bottom:16px;">📍 Dar es Salaam, Kinondoni 🇹🇿</div>
@@ -275,7 +275,11 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
     <input class="input" type="number" placeholder="Idadi ya vyumba / Bedrooms" id="pbeds">
     <textarea class="input" rows="3" placeholder="Maelezo / Description..." id="pdesc"></textarea>
     <div class="error" id="posterr">❌ Jaza sehemu zote muhimu!</div>
-    <div style="background:rgba(255,255,255,0.08);border:2px dashed rgba(142,36,170,0.4);border-radius:14px;padding:24px;text-align:center;margin-bottom:12px;cursor:pointer;"><div style="font-size:32px;">📸</div><div style="font-size:13px;color:#9090C0;margin-top:6px;">Upakiaji wa picha unakuja hivi karibuni</div></div>
+    <div style="background:rgba(255,255,255,0.08);border:2px dashed rgba(142,36,170,0.4);border-radius:14px;padding:18px;text-align:center;margin-bottom:12px;">
+      <div id="listingPhotoPreview" style="font-size:32px;margin-bottom:6px;">📸</div>
+      <div style="font-size:12px;color:#9090C0;margin-bottom:8px;">Weka picha ya nyumba</div>
+      <input type="file" id="listingPhotoInput" onchange="handleListingPhotoSelect(event)" style="color:white;font-size:12px;max-width:260px;">
+    </div>
     <button class="btn btn-rainbow" id="postBtn" onclick="doPost()">🚀 Weka Sasa!</button>
   </div>
   <div class="bnav">
@@ -873,8 +877,11 @@ function listingCardHtml(l){
   const beds = l.beds || '-';
   const owner = escapeHtml(l.ownerName || 'Mmiliki');
   const emoji = (l.type || '').includes('Chumba') ? '🛏️' : '🏡';
+  const media = l.photoBase64
+    ? `<img src="${l.photoBase64}" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:8px;">`
+    : `<div style="font-size:40px;text-align:center;margin-bottom:8px;">${emoji}</div>`;
   return `<div class="card" style="cursor:pointer;" onclick="showDetail('${l.id}')">
-    <div style="font-size:40px;text-align:center;margin-bottom:8px;">${emoji}</div>
+    ${media}
     <div class="card-title">${title}</div>
     <div class="card-sub">📍 ${location}</div>
     <div class="card-price">${price}</div>
@@ -936,6 +943,14 @@ function showDetail(id){
   const l = allListings.find(x => x.id === id);
   if(!l) return;
   currentDetailListing = l;
+  const photoEl = document.getElementById('detailPhoto');
+  if(l.photoBase64){
+    photoEl.style.padding = '0';
+    photoEl.innerHTML = '<img src="' + l.photoBase64 + '" style="width:100%;max-height:220px;object-fit:cover;border-radius:18px;display:block;">';
+  } else {
+    photoEl.style.padding = '20px';
+    photoEl.innerHTML = '🏡';
+  }
   document.getElementById('detailTitle').textContent = l.title || 'Nyumba';
   document.getElementById('detailPrice').textContent = l.price ? ('TZS ' + Number(l.price).toLocaleString() + '/mwezi') : 'Bei: Waliza';
   document.getElementById('detailLocation').textContent = '📍 ' + (l.location || '');
@@ -1177,6 +1192,42 @@ function toFirestoreFields(obj){
 }
 
 let currentEditListingId = null;
+let currentListingPhoto = null;
+
+function handleListingPhotoSelect(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const size = 500;
+      const scale = Math.min(size / img.width, size / img.height, 1);
+      const w = img.width * scale, h = img.height * scale;
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      currentListingPhoto = canvas.toDataURL('image/jpeg', 0.6);
+      document.getElementById('listingPhotoPreview').innerHTML = '<img src="' + currentListingPhoto + '" style="max-width:100%;max-height:140px;border-radius:10px;">';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function resetPostForm(){
+  currentEditListingId = null;
+  currentListingPhoto = null;
+  document.getElementById('ptitle').value = '';
+  document.getElementById('pprice').value = '';
+  document.getElementById('plocation').value = '';
+  document.getElementById('pbeds').value = '';
+  document.getElementById('pdesc').value = '';
+  document.getElementById('listingPhotoPreview').innerHTML = '📸';
+  document.getElementById('listingPhotoInput').value = '';
+  document.getElementById('postBtn').textContent = '🚀 Weka Sasa!';
+}
 
 function doPost(){
   if(!auth.currentUser){
@@ -1217,10 +1268,12 @@ function doPost(){
       ownerId: user.uid,
       ownerName: user.displayName || (user.email ? user.email.split('@')[0] : 'Mmiliki')
     };
+    if(currentListingPhoto) dataFields.photoBase64 = currentListingPhoto;
     const fields = toFirestoreFields(dataFields);
 
     if(isEdit){
       const maskFields = ['type','title','price','location','beds','description'];
+      if(currentListingPhoto) maskFields.push('photoBase64');
       const mask = maskFields.map(f => 'updateMask.fieldPaths=' + encodeURIComponent(f)).join('&');
       const url = 'https://firestore.googleapis.com/v1/projects/' + firebaseConfig.projectId + '/databases/(default)/documents/listings/' + currentEditListingId + '?' + mask;
       return fetch(url, {
@@ -1247,15 +1300,9 @@ function doPost(){
 
   Promise.race([writePromise, timeoutPromise])
   .then(() => {
-    setLoading(btn, false, isEdit ? '💾 Hifadhi Mabadiliko' : '🚀 Weka Sasa!');
-    document.getElementById('ptitle').value = '';
-    document.getElementById('pprice').value = '';
-    document.getElementById('plocation').value = '';
-    document.getElementById('pbeds').value = '';
-    document.getElementById('pdesc').value = '';
     const wasEdit = isEdit;
-    currentEditListingId = null;
-    document.getElementById('postBtn').textContent = '🚀 Weka Sasa!';
+    setLoading(btn, false, wasEdit ? '💾 Hifadhi Mabadiliko' : '🚀 Weka Sasa!');
+    resetPostForm();
     loadListings();
     if(wasEdit){ go('mylistings'); loadMyListings(); } else { go('home'); }
   })
@@ -1270,11 +1317,13 @@ function editListing(id){
   const l = allListings.find(x => x.id === id);
   if(!l) return;
   currentEditListingId = id;
+  currentListingPhoto = null;
   document.getElementById('ptitle').value = l.title || '';
   document.getElementById('pprice').value = l.price || '';
   document.getElementById('plocation').value = l.location || '';
   document.getElementById('pbeds').value = l.beds || '';
   document.getElementById('pdesc').value = l.description || '';
+  document.getElementById('listingPhotoPreview').innerHTML = l.photoBase64 ? ('<img src="' + l.photoBase64 + '" style="max-width:100%;max-height:140px;border-radius:10px;">') : '📸';
   document.getElementById('postBtn').textContent = '💾 Hifadhi Mabadiliko';
   document.getElementById('posterr').style.display = 'none';
   go('post');
