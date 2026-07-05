@@ -207,7 +207,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
       </div>
     </div>
     <div style="display:flex;gap:10px;">
-      <button class="btn btn-rainbow" style="flex:2;margin:0;" onclick="go('messages')">💬 Wasiliana</button>
+      <button class="btn btn-rainbow" style="flex:2;margin:0;" onclick="openChatFromDetail()">💬 Wasiliana</button>
       <button class="btn btn-mpesa" style="flex:1;margin:0;" onclick="go('payments')">💳 Lipia</button>
     </div>
   </div>
@@ -236,16 +236,7 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
 <div class="screen" id="messages" style="justify-content:flex-start;padding-top:60px;padding-bottom:80px;">
   <div style="width:100%;max-width:340px;">
     <div style="font-size:20px;font-weight:800;margin-bottom:16px;">💬 Ujumbe / Messages</div>
-    <div style="display:flex;align-items:center;gap:12px;padding:14px;background:rgba(255,255,255,0.08);border-radius:16px;margin-bottom:10px;cursor:pointer;">
-      <div style="width:50px;height:50px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853);display:flex;align-items:center;justify-content:center;font-weight:800;position:relative;">J<div style="position:absolute;bottom:2px;right:2px;width:11px;height:11px;border-radius:50%;background:#00C853;border:2px solid #0D1B3E;"></div></div>
-      <div style="flex:1;"><div style="font-size:14px;font-weight:800;">John Makundi</div><div style="font-size:12px;color:#9090C0;">Karibu! Nyumba inapatikana...</div></div>
-      <div style="text-align:right;"><div style="font-size:11px;color:#9090C0;">2:30 PM</div><div style="background:linear-gradient(135deg,#FF3B3B,#8E24AA);border-radius:10px;padding:2px 7px;font-size:11px;font-weight:800;margin-top:4px;">2</div></div>
-    </div>
-    <div style="display:flex;align-items:center;gap:12px;padding:14px;background:rgba(255,255,255,0.08);border-radius:16px;margin-bottom:10px;cursor:pointer;">
-      <div style="width:50px;height:50px;border-radius:50%;background:conic-gradient(#FFD700,#FF8C00,#FF3B3B,#8E24AA);display:flex;align-items:center;justify-content:center;font-weight:800;">A</div>
-      <div style="flex:1;"><div style="font-size:14px;font-weight:800;">Amina Hassan</div><div style="font-size:12px;color:#9090C0;">Chumba bado kinapatikana...</div></div>
-      <div style="text-align:right;"><div style="font-size:11px;color:#9090C0;">Jana</div></div>
-    </div>
+    <div id="chatListContainer"><div style="text-align:center;color:#9090C0;font-size:13px;padding:20px 0;">Inapakia mazungumzo...</div></div>
     <a href="https://wa.me/255684253244" class="btn btn-green" style="margin-top:12px;">💬 Wasiliana WhatsApp</a>
   </div>
   <div class="bnav">
@@ -254,6 +245,22 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
     <div class="bni" onclick="go('post')"><div class="bni-icon">➕</div><div class="bni-label">Post</div></div>
     <div class="bni on" onclick="go('messages')"><div class="bni-icon">💬</div><div class="bni-label">Chat</div></div>
     <div class="bni" onclick="go('payments')"><div class="bni-icon">💳</div><div class="bni-label">Pay</div></div>
+  </div>
+</div>
+
+<!-- CHATROOM -->
+<div class="screen" id="chatroom" style="justify-content:flex-start;padding:0;">
+  <div style="width:100%;max-width:400px;display:flex;flex-direction:column;height:100vh;">
+    <div style="display:flex;align-items:center;gap:10px;padding:16px 16px 12px;background:rgba(255,255,255,0.05);">
+      <button class="btn btn-back" style="width:auto;margin:0;padding:10px 14px;" onclick="closeChatroom()">←</button>
+      <div id="chatroomAvatar" style="width:38px;height:38px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;">?</div>
+      <div id="chatroomName" style="font-size:15px;font-weight:800;">Mtumiaji</div>
+    </div>
+    <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px;"></div>
+    <div style="display:flex;gap:8px;padding:12px 16px;background:rgba(255,255,255,0.05);">
+      <input id="chatInput" type="text" placeholder="Andika ujumbe..." style="flex:1;padding:12px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;font-family:'Nunito',sans-serif;font-size:14px;outline:none;" onkeypress="if(event.key==='Enter')sendChatMessage()">
+      <button class="btn btn-rainbow" style="width:auto;margin:0;padding:12px 18px;" onclick="sendChatMessage()">➤</button>
+    </div>
   </div>
 </div>
 
@@ -518,6 +525,7 @@ function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
+  if(id === 'messages') loadChatList();
 }
 
 setTimeout(() => {
@@ -864,7 +872,7 @@ function listingCardHtml(l){
     <div style="font-size:11px;color:#9090C0;">🛏️ ${beds} Beds</div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">
       <div style="font-size:12px;font-weight:700;">${owner}</div>
-      <button class="btn btn-rainbow" style="width:auto;padding:6px 14px;font-size:11px;margin:0;" onclick="event.stopPropagation();go('messages')">💬 Wasiliana</button>
+      <button class="btn btn-rainbow" style="width:auto;padding:6px 14px;font-size:11px;margin:0;" onclick="event.stopPropagation();openChatFromListing('${l.id}')">💬 Wasiliana</button>
     </div>
   </div>`;
 }
@@ -913,9 +921,12 @@ function loadListings(){
     });
 }
 
+let currentDetailListing = null;
+
 function showDetail(id){
   const l = allListings.find(x => x.id === id);
   if(!l) return;
+  currentDetailListing = l;
   document.getElementById('detailTitle').textContent = l.title || 'Nyumba';
   document.getElementById('detailPrice').textContent = l.price ? ('TZS ' + Number(l.price).toLocaleString() + '/mwezi') : 'Bei: Waliza';
   document.getElementById('detailLocation').textContent = '📍 ' + (l.location || '');
@@ -926,6 +937,221 @@ function showDetail(id){
   document.getElementById('detailOwnerName').textContent = ownerName;
   document.getElementById('detailOwnerInitial').textContent = ownerName.charAt(0).toUpperCase();
   go('detail');
+}
+
+/* ============================================================
+   CHAT HALISI (Firestore kupitia REST — inapita mtandao mgumu)
+   ============================================================ */
+let currentChatId = null;
+let currentChatOtherUid = null;
+let currentChatPollTimer = null;
+let lastRenderedMsgCount = -1;
+
+function getChatId(uidA, uidB){
+  return [uidA, uidB].sort().join('_');
+}
+
+function escapeHtmlChat(str){
+  const d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+function firestorePatch(path, dataObj, mergeFields){
+  return auth.currentUser.getIdToken().then(idToken => {
+    const fields = toFirestoreFields(dataObj);
+    const mask = mergeFields.map(f => 'updateMask.fieldPaths=' + encodeURIComponent(f)).join('&');
+    const url = 'https://firestore.googleapis.com/v1/projects/' + firebaseConfig.projectId + '/databases/(default)/documents/' + path + '?' + mask;
+    return fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+      body: JSON.stringify({ fields: fields })
+    }).then(res => {
+      if(!res.ok) return res.json().then(e => { throw {message: (e.error && e.error.message) || res.statusText}; });
+      return res.json();
+    });
+  });
+}
+
+function firestorePost(path, dataObj){
+  return auth.currentUser.getIdToken().then(idToken => {
+    const fields = toFirestoreFields(dataObj);
+    const url = 'https://firestore.googleapis.com/v1/projects/' + firebaseConfig.projectId + '/databases/(default)/documents/' + path;
+    return fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+      body: JSON.stringify({ fields: fields })
+    }).then(res => {
+      if(!res.ok) return res.json().then(e => { throw {message: (e.error && e.error.message) || res.statusText}; });
+      return res.json();
+    });
+  });
+}
+
+function renderChatMessages(msgs, myUid){
+  const box = document.getElementById('chatMessages');
+  if(!msgs.length){
+    box.innerHTML = '<div style="text-align:center;color:#9090C0;font-size:12px;">Bado hakuna ujumbe. Anza mazungumzo! 👋</div>';
+    return;
+  }
+  box.innerHTML = msgs.map(m => {
+    const mine = m.senderId === myUid;
+    return `<div style="align-self:${mine ? 'flex-end' : 'flex-start'};max-width:75%;background:${mine ? 'linear-gradient(135deg,#FF6B6B,#8E24AA)' : 'rgba(255,255,255,0.1)'};padding:10px 14px;border-radius:16px;font-size:13px;">${escapeHtmlChat(m.text)}</div>`;
+  }).join('');
+  box.scrollTop = box.scrollHeight;
+}
+
+function pollChatMessages(){
+  if(!currentChatId) return;
+  db.collection('chats').doc(currentChatId).collection('messages').orderBy('createdAt_ms', 'asc').limit(200).get()
+    .then(snap => {
+      if(snap.size === lastRenderedMsgCount) return; // hakuna kipya, usisasishe bure
+      lastRenderedMsgCount = snap.size;
+      const msgs = [];
+      snap.forEach(doc => msgs.push(doc.data()));
+      renderChatMessages(msgs, auth.currentUser.uid);
+    })
+    .catch(e => console.log('pollChatMessages error:', e));
+}
+
+function openChat(otherUid, otherName){
+  if(!auth.currentUser){
+    alert('Tafadhali ingia (Login) kwanza.');
+    go('login');
+    return;
+  }
+  if(!otherUid){
+    alert('Mmiliki wa tangazo hili hajapatikana.');
+    return;
+  }
+  const me = auth.currentUser;
+  if(otherUid === me.uid){
+    alert('Hii ni tangazo lako mwenyewe.');
+    return;
+  }
+  const chatId = getChatId(me.uid, otherUid);
+  currentChatId = chatId;
+  currentChatOtherUid = otherUid;
+  lastRenderedMsgCount = -1;
+
+  document.getElementById('chatroomName').textContent = otherName || 'Mtumiaji';
+  document.getElementById('chatroomAvatar').textContent = (otherName || 'M').charAt(0).toUpperCase();
+  document.getElementById('chatMessages').innerHTML = '<div style="text-align:center;color:#9090C0;font-size:12px;">Inapakia ujumbe...</div>';
+
+  const myName = me.displayName || (me.email ? me.email.split('@')[0] : 'Mimi');
+  firestorePatch('chats/' + chatId, {
+    participants_0: [me.uid, otherUid].sort()[0],
+    participants_1: [me.uid, otherUid].sort()[1]
+  }, ['participants_0', 'participants_1']).catch(e => console.log('chat init error:', e));
+
+  // Weka pia taarifa za majina (patch tofauti kwa usalama wa field paths zenye UID)
+  const namesFields = {};
+  namesFields[me.uid] = myName;
+  namesFields[otherUid] = otherName || 'Mtumiaji';
+  auth.currentUser.getIdToken().then(idToken => {
+    const fields = { participantNames: { mapValue: { fields: {
+      [me.uid]: { stringValue: myName },
+      [otherUid]: { stringValue: otherName || 'Mtumiaji' }
+    } } } };
+    const url = 'https://firestore.googleapis.com/v1/projects/' + firebaseConfig.projectId + '/databases/(default)/documents/chats/' + chatId + '?updateMask.fieldPaths=participantNames';
+    return fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+      body: JSON.stringify({ fields: fields })
+    });
+  }).catch(e => console.log('chat names error:', e));
+
+  if(currentChatPollTimer) clearInterval(currentChatPollTimer);
+  pollChatMessages();
+  currentChatPollTimer = setInterval(pollChatMessages, 4000);
+
+  go('chatroom');
+}
+
+function openChatFromDetail(){
+  if(currentDetailListing){
+    openChat(currentDetailListing.ownerId, currentDetailListing.ownerName);
+  }
+}
+
+function openChatFromListing(id){
+  const l = allListings.find(x => x.id === id);
+  if(l) openChat(l.ownerId, l.ownerName);
+}
+
+function closeChatroom(){
+  if(currentChatPollTimer){ clearInterval(currentChatPollTimer); currentChatPollTimer = null; }
+  currentChatId = null;
+  go('messages');
+  loadChatList();
+}
+
+function sendChatMessage(){
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text || !currentChatId || !auth.currentUser) return;
+  input.value = '';
+  const me = auth.currentUser;
+
+  // Onyesha ujumbe mara moja kwenye skrini (optimistic) huku ukitumwa
+  const box = document.getElementById('chatMessages');
+  if(box.innerHTML.indexOf('Bado hakuna ujumbe') !== -1) box.innerHTML = '';
+  box.innerHTML += `<div style="align-self:flex-end;max-width:75%;background:linear-gradient(135deg,#FF6B6B,#8E24AA);padding:10px 14px;border-radius:16px;font-size:13px;opacity:0.6;">${escapeHtmlChat(text)}</div>`;
+  box.scrollTop = box.scrollHeight;
+
+  firestorePost('chats/' + currentChatId + '/messages', {
+    senderId: me.uid,
+    text: text,
+    createdAt_ms: Date.now()
+  }).then(() => {
+    return firestorePatch('chats/' + currentChatId, {
+      lastMessage: text,
+      updatedAt_ms: Date.now()
+    }, ['lastMessage', 'updatedAt_ms']);
+  }).then(() => {
+    lastRenderedMsgCount = -1;
+    pollChatMessages();
+  }).catch(e => {
+    console.log('sendChatMessage error:', e);
+    alert('Imeshindwa kutuma ujumbe. Angalia mtandao wako na ujaribu tena.');
+  });
+}
+
+function loadChatList(){
+  if(!auth.currentUser) return;
+  const me = auth.currentUser;
+  const container = document.getElementById('chatListContainer');
+  db.collection('chats').where('participants_0', '==', me.uid).get()
+    .then(snapA => {
+      return db.collection('chats').where('participants_1', '==', me.uid).get().then(snapB => {
+        const chats = [];
+        snapA.forEach(doc => chats.push({ id: doc.id, ...doc.data() }));
+        snapB.forEach(doc => chats.push({ id: doc.id, ...doc.data() }));
+        return chats;
+      });
+    })
+    .then(chats => {
+      if(!container) return;
+      if(!chats.length){
+        container.innerHTML = '<div style="text-align:center;color:#9090C0;font-size:13px;padding:20px 0;">Bado hakuna mazungumzo. Wasiliana na mmiliki wa nyumba ili kuanza! 💬</div>';
+        return;
+      }
+      chats.sort((a, b) => (b.updatedAt_ms || 0) - (a.updatedAt_ms || 0));
+      container.innerHTML = chats.map(c => {
+        const otherUid = c.participants_0 === me.uid ? c.participants_1 : c.participants_0;
+        const otherName = (c.participantNames && c.participantNames[otherUid]) || 'Mtumiaji';
+        const initial = otherName.charAt(0).toUpperCase();
+        const preview = escapeHtmlChat(c.lastMessage || 'Anza mazungumzo...');
+        return `<div style="display:flex;align-items:center;gap:12px;padding:14px;background:rgba(255,255,255,0.08);border-radius:16px;margin-bottom:10px;cursor:pointer;" onclick="openChat('${otherUid}', '${otherName.replace(/'/g,"\\'")}')">
+          <div style="width:50px;height:50px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853);display:flex;align-items:center;justify-content:center;font-weight:800;">${initial}</div>
+          <div style="flex:1;overflow:hidden;"><div style="font-size:14px;font-weight:800;">${escapeHtmlChat(otherName)}</div><div style="font-size:12px;color:#9090C0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${preview}</div></div>
+        </div>`;
+      }).join('');
+    })
+    .catch(e => {
+      console.log('loadChatList error:', e);
+      if(container) container.innerHTML = '<div style="text-align:center;color:#FF8C8C;font-size:12px;padding:20px 0;">Imeshindwa kupakia mazungumzo.</div>';
+    });
 }
 
 function toFirestoreValue(v){
