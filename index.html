@@ -165,6 +165,14 @@ body{font-family:'Nunito',sans-serif;background:#0D1B3E;color:white;min-height:1
       </div>
       <div onclick="go('profile')" id="homeAvatar" style="width:44px;height:44px;border-radius:50%;background:conic-gradient(#FF3B3B,#FF8C00,#FFD700,#00C853,#1565C0,#8E24AA,#FF3B3B);display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;">E</div>
     </div>
+    <div id="verifyBanner" style="display:none;background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.35);border-radius:14px;padding:12px 14px;margin-bottom:16px;">
+      <div style="font-size:12px;color:#FFD700;font-weight:700;margin-bottom:4px;">⚠️ Barua pepe yako haijathibitishwa</div>
+      <div style="font-size:11px;color:#9090C0;margin-bottom:8px;">Angalia email yako (pamoja na "Spam") kwa link ya uthibitisho.</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline" style="flex:1;margin:0;padding:8px;font-size:11px;border-color:#FFD700;color:#FFD700;" onclick="resendVerificationEmail()">📨 Tuma tena</button>
+        <button class="btn btn-outline" style="flex:1;margin:0;padding:8px;font-size:11px;" onclick="recheckVerification()">🔄 Nimethibitisha</button>
+      </div>
+    </div>
     <div style="display:flex;align-items:center;background:rgba(255,255,255,0.1);border-radius:14px;padding:12px 16px;margin-bottom:16px;">
       <span style="margin-right:8px;">🔍</span>
       <input style="background:none;border:none;outline:none;color:white;font-family:'Nunito',sans-serif;font-size:14px;flex:1;" placeholder="Tafuta nyumba... / Search..." data-i18n-placeholder="search_placeholder">
@@ -779,25 +787,28 @@ function doRegister(){
   err.style.display = 'none';
   setLoading(btn, true);
 
+  let createdUser = null;
+
   auth.createUserWithEmailAndPassword(e, p)
     .then(cred => {
-      // Weka jina la mtumiaji kwenye profile ya Firebase Auth
-      return cred.user.updateProfile({ displayName: n }).then(() => cred.user);
+      createdUser = cred.user;
+      return cred.user.updateProfile({ displayName: n });
     })
-    .then(user => {
-      // Hifadhi taarifa za ziada kwenye Firestore
-      return db.collection('users').doc(user.uid).set({
-        name: n,
-        email: e,
-        phone: phone,
-        country: country,
-        role: role,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    .then(() => createdUser.sendEmailVerification().catch(err2 => console.log('verify email error:', err2)))
+    .then(() => createdUser.getIdToken())
+    .then(idToken => {
+      const fields = toFirestoreFields({ name: n, email: e, phone: phone, country: country, role: role });
+      const url = 'https://firestore.googleapis.com/v1/projects/' + firebaseConfig.projectId + '/databases/(default)/documents/users/' + createdUser.uid + '?updateMask.fieldPaths=name&updateMask.fieldPaths=email&updateMask.fieldPaths=phone&updateMask.fieldPaths=country&updateMask.fieldPaths=role';
+      return fetch(url, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+        body: JSON.stringify({ fields: fields })
       });
     })
     .then(() => {
       setLoading(btn, false, '🎉 Fungua Akaunti');
       go('home');
+      updateVerifyBanner();
     })
     .catch(errObj => {
       setLoading(btn, false, '🎉 Fungua Akaunti');
@@ -985,14 +996,50 @@ auth.onAuthStateChanged(user => {
     setAvatarDisplay('homeAvatar', initial, null);
     setAvatarDisplay('profileAvatar', initial, null);
     loadUserProfilePhoto(user.uid, initial, name);
+    updateVerifyBanner();
 
     // Kama tuko kwenye splash/login/register wakati session tayari ipo, peleka home
     const activeId = document.querySelector('.screen.active').id;
     if(['splash','login','register'].includes(activeId)){
       go('home');
     }
+  } else {
+    const banner = document.getElementById('verifyBanner');
+    if(banner) banner.style.display = 'none';
   }
 });
+
+function updateVerifyBanner(){
+  const banner = document.getElementById('verifyBanner');
+  if(!banner) return;
+  const user = auth.currentUser;
+  if(user && !user.emailVerified){
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function resendVerificationEmail(){
+  const user = auth.currentUser;
+  if(!user) return;
+  user.sendEmailVerification()
+    .then(() => alert('📨 Barua pepe ya uthibitisho imetumwa tena! Angalia inbox yako (na "Spam").'))
+    .catch(err => alert('❌ Imeshindwa kutuma: ' + friendlyError(err.code)));
+}
+
+function recheckVerification(){
+  const user = auth.currentUser;
+  if(!user) return;
+  user.reload().then(() => {
+    updateVerifyBanner();
+    if(user.emailVerified){
+      alert('✅ Barua pepe yako imethibitishwa! Asante.');
+    } else {
+      alert('⏳ Bado haijathibitishwa. Bonyeza link kwenye email yako kwanza.');
+    }
+  });
+}
 
 /* ============================================================
    MALIPO (bado ni mock — tutaunganisha gateway halisi baadaye)
